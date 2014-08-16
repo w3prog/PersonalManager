@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">PersonalManager</string>
+    <string name="Contacts">Контаты</string>
+    <string name="Actions">Мероприятия</string>
+    <string name="Add">Добавить элемент</string>
+    <string name="ActionEditTitle">Название мероприятия</string>
+    <string name="DateAction">Дата мероприятия</string>
+    <string name="Time">Время</string>
+    <string name="SelectDate">выберите дату</string>
+    <string name="SelectTime">Введите время</string>
+    <string name="AddPhoneNumberButton">Добавить</string>
+    <string name="AddEmailButton">Добавить</string>
+    <string name="AddWebSiteButton">Добавить</string>
+</resources>
