@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import com.w3prog.personalmanager.Fragment.FragmentListAction;
 import com.w3prog.personalmanager.Fragment.FragmentListPerson;
+import com.w3prog.personalmanager.Fragment.FragmentListTask;
 import com.w3prog.personalmanager.R;
 
 public class StartTabActivity extends Activity implements ActionBar.TabListener {
@@ -32,6 +33,11 @@ public class StartTabActivity extends Activity implements ActionBar.TabListener 
         tab.setText(getString(R.string.Actions));
         bar.addTab(tab);
 
+        tab = bar.newTab();
+        tab.setTabListener(this);
+        tab.setText(getString(R.string.Tasks));
+        bar.addTab(tab);
+
     }
 
     @Override
@@ -52,7 +58,7 @@ public class StartTabActivity extends Activity implements ActionBar.TabListener 
                 ft.replace(R.id.fragmentActivity, fragment);
                 break;
             case 2:
-                fragment = new FragmentListAction();
+                fragment = new FragmentListTask();
                 ft.add(R.id.fragmentActivity,fragment);
                 break;
         }

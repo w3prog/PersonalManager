@@ -22,6 +22,9 @@
         <activity android:name=".Activity.ActivityEditPerson"/>
 
         <activity android:name=".Activity.ActivityEditAction"/>
+
+        <activity android:name=".Activity.ActivityEditTask"/>
+
     </application>
 
 </manifest>

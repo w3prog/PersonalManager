@@ -4,13 +4,22 @@
     <string name="app_name">PersonalManager</string>
     <string name="Contacts">Контаты</string>
     <string name="Actions">Мероприятия</string>
+    <string name="Tasks">Задачи</string>
     <string name="Add">Добавить элемент</string>
     <string name="ActionEditTitle">Название мероприятия</string>
     <string name="DateAction">Дата мероприятия</string>
     <string name="Time">Время</string>
-    <string name="SelectDate">выберите дату</string>
+    <string name="SelectDate">Выберите дату</string>
     <string name="SelectTime">Введите время</string>
     <string name="AddPhoneNumberButton">Добавить</string>
     <string name="AddEmailButton">Добавить</string>
     <string name="AddWebSiteButton">Добавить</string>
+
+    <string name="addTask">Добавить задачу</string>
+    <string name="removeTask">Удалить задачу</string>
+    <string name="TaskEditTitle">Название задачи</string>
+    <string name="input_name_task">Введите название задачи</string>
+    <string name="DescriptionTask">Описание задачи</string>
+    <string name="Input_description_task">Введите описание задачи</string>
+
 </resources>

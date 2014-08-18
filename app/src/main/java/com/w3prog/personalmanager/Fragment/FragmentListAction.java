@@ -48,8 +48,8 @@ public class FragmentListAction extends ListFragment {
 
         //todo Можно ли это сделать попроще
 
-        ActionAdapter personAdapter = new ActionAdapter(actionsArrayList);
-        setListAdapter(personAdapter);
+        ActionAdapter actionAdapter = new ActionAdapter(actionsArrayList);
+        setListAdapter(actionAdapter);
     }
 
     //todo пока бессмысленно нужно будет определить как лучше сохранять и добавлять данные

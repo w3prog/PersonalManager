@@ -45,11 +45,6 @@ public class FragmentEditAction extends Fragment {
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 
         action = DataBase.Get(getActivity()).getAction(actionID);
-        Log.e(TAG,action.getName());
-        Log.e(TAG,action.getDescription());
-        Log.e(TAG,action.getDate().toString());
-        Log.d(TAG, " FragmentEditPerson  onCreate");
-
     }
 
     @Override

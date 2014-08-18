@@ -37,20 +37,18 @@ public class DataBase {
     private static final String TABLE_TASK = "task";
     private static final String ROW_TASK_ID = "id";
     private static final String ROW_TASK_NAME = "NameTask";
+    private static final String ROW_TASK_DESCRIPTION = "Description";
     //Таблица ACTION
     private static final String TABLE_ACTION = "action";
     private static final String ROW_ACTION_ID = "id";
     private static final String ROW_ACTION_NAME = "NameAction";
     private static final String ROW_ACTION_DATE = "Date";
     private static final String ROW_ACTION_DESCRIPTION = "Description";
+    private static final String ROW_ACTION_TASK_ID = "taskId";
     //Таблица PERSON_IN_ACTION
     private static final String TABLE_PERSON_IN_ACTION = "person_in_action";
     private static final String ROW_PERSON_IN_ACTION_ID_PERSION = "idPersion";
     private static final String ROW_PERSON_IN_ACTION_ID_ACTION = "idAction";
-    //Таблица ACTION_IN_TASK
-    private static final String TABLE_ACTION_IN_TASK = "ActionINTask";
-    private static final String ROW_ACTION_IN_TASK_ID_ACTION = "idAction";
-    private static final String ROW_ACTION_IN_TASK_ID_TASK = "idTask";
     //Таблица PERSON_IN_GROUP
     private static final String TABLE_PERSON_IN_GROUP = "PersonInGroup";
     private static final String ROW_PERSON_IN_GROUP_ID_PERSON = "idPerson";
@@ -253,6 +251,7 @@ public class DataBase {
 //Окончание операций с таблицей Contacts
 
 // начало операций с таблицей Action
+    //todo я модернизировал таблицу нужно изменить методы под новую таблицу изменения
     public long insertAction(Action c){
         ContentValues cv = new ContentValues();
         cv.put(ROW_ACTION_NAME, c.getName());
@@ -357,7 +356,68 @@ public class DataBase {
         return null;
     }
 // конец операция с таблицей Actions
+// начало операций с таблицей Task
+    public long insertTask(Task task){
+        ContentValues cv = new ContentValues();
+        cv.put(ROW_TASK_NAME, task.getName());
+        cv.put(ROW_TASK_DESCRIPTION, task.getDescription());
+        return database.insert(TABLE_TASK, null, cv);
+    }
 
+    public void updateTask(int id, Task task) {
+        ContentValues cv = new ContentValues();
+
+        cv.put(ROW_TASK_ID, id);
+        cv.put(ROW_TASK_NAME, task.getName());
+        cv.put(ROW_ACTION_DESCRIPTION, task.getDescription());
+        database.update(TABLE_TASK, cv, ROW_TASK_ID + " = ?",
+                new String[]{Integer.toString(id)});
+    }
+
+    public void deleteTask(int id){
+        database.delete(TABLE_TASK, ROW_TASK_ID + " = " + id, null);
+    }
+
+    public Task getTask(long taskID) {
+
+        Cursor c = database.query(TABLE_TASK,
+                null,
+                ROW_TASK_ID+"="+taskID,
+                null,null,null,null);
+        Task task;
+        if (c.moveToFirst()){
+
+            task = new Task(
+                    c.getInt(c.getColumnIndex(ROW_TASK_ID)),
+                    c.getString(c.getColumnIndex(ROW_TASK_NAME)),
+                    c.getString(c.getColumnIndex(ROW_TASK_DESCRIPTION))
+            );
+            return task;
+        } else {
+            return null;
+        }
+    }
+
+    public ArrayList<Task> getTasks() {
+        ArrayList<Task>  arrayList = new ArrayList<Task>();
+        Cursor c = database.rawQuery("Select "+ROW_TASK_ID+", " +
+                ROW_TASK_NAME+", " +
+                ROW_TASK_DESCRIPTION+" from " + TABLE_TASK + " "+
+                "order by " + ROW_TASK_ID,null);
+        if (c.moveToFirst()){
+            do {
+
+                arrayList.add( new Task(
+                        c.getInt(c.getColumnIndex(ROW_TASK_ID)),
+                        c.getString(c.getColumnIndex(ROW_TASK_NAME)),
+                        c.getString(c.getColumnIndex(ROW_TASK_DESCRIPTION))
+                ));
+                c.moveToNext();
+            } while (c.isAfterLast() == false);
+        }
+        return arrayList;
+    }
+// Конец операций с таблицей Task
     public void generateDataBase(){
 
         database.delete(TABLE_ACTION, "", null);
@@ -413,11 +473,14 @@ public class DataBase {
         return sDataBase;
     }
 
+
+
+
     private class myDataBaseHelper extends SQLiteOpenHelper{
 
         private static final String TAG = "DataBase.myDataBaseHelper";
         private static final String DATA_BASE_NAME = "PrilName";
-        private static final int DATA_BASE_VERSION = 1;
+        private static final int DATA_BASE_VERSION = 2;
 
 
         public myDataBaseHelper(Context context) {
@@ -438,37 +501,33 @@ public class DataBase {
                     +ROW_PERSON_SRC_IMG+" text, "
                     +ROW_PERSON_POST+" text" +");");
 
-
-
             db.execSQL("create table "+TABLE_CONTACT+ "("
                     +ROW_CONTACT_ID+" integer primary key autoincrement, "
                     +ROW_CONTACT_ID_PERSON+" integer, "
                     +ROW_CONTACT_TYPE+" text, "
                     +ROW_CONTACT_DESCRIPTION+" text" +");");
-
+/*todo пока без обойдусь без этого функционала
             db.execSQL("create table "+TABLE_GROUP+ "("
                     +ROW_GROUP_ID+" integer primary key autoincrement, "
                     +ROW_GROUP_NAMEGROUP+" text" +");");
-
+*/
             db.execSQL("create table "+TABLE_TASK+ "("
                     +ROW_TASK_ID+" integer primary key autoincrement, "
-                    +ROW_TASK_NAME+" text" +");");
+                    +ROW_TASK_NAME+" text"
+                    +ROW_TASK_DESCRIPTION+" text" +");");
 
             db.execSQL("create table "+TABLE_ACTION+ "("
                     +ROW_ACTION_ID+" integer primary key autoincrement, "
                     +ROW_ACTION_NAME+" text, "
                     +ROW_ACTION_DESCRIPTION+" text, "
-                    +ROW_ACTION_DATE+" text" +");");
+                    +ROW_ACTION_DATE+" text"
+                    +ROW_ACTION_TASK_ID+" integer"+");");
 
             //Todo Узнать про реализацию связи многие ко многим в SQLite
 /*
             db.execSQL("create table "+TABLE_PERSON_IN_ACTION+ "("
                     +ROW_PERSON_IN_ACTION_ID_PERSION+" integer primary key, "
                     +ROW_PERSON_IN_ACTION_ID_ACTION+" integer primary key" +");");
-
-            db.execSQL("create table "+TABLE_ACTION_IN_TASK+ "("
-                    +ROW_ACTION_IN_TASK_ID_ACTION+" integer primary key, "
-                    +ROW_ACTION_IN_TASK_ID_TASK+" integer primary key" +");");
 
             db.execSQL("create table "+TABLE_PERSON_IN_GROUP+ "("
                     +ROW_PERSON_IN_GROUP_ID_PERSON+" integer primary key, "
