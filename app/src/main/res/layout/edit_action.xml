@@ -57,6 +57,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="#888888"
+        android:inputType="textMultiLine"
+        android:lines="5"
         android:text="Введите описание мероприятия"/>
 
+    <TextView
+        style="?android:listSeparatorTextViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Относится к задаче"/>
+
+    <Button
+        android:id="@+id/ActionTask"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/SelectTask"/>
 </LinearLayout>

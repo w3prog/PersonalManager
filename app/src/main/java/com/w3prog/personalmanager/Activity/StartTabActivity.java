@@ -7,9 +7,11 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 
-import com.w3prog.personalmanager.Fragment.FragmentListAction;
-import com.w3prog.personalmanager.Fragment.FragmentListPerson;
-import com.w3prog.personalmanager.Fragment.FragmentListTask;
+import com.w3prog.personalmanager.Fragment.List.FragmentListAction;
+import com.w3prog.personalmanager.Fragment.List.FragmentListPerson;
+import com.w3prog.personalmanager.Fragment.List.FragmentListPersonInAction;
+import com.w3prog.personalmanager.Fragment.List.FragmentListTask;
+import com.w3prog.personalmanager.Fragment.FragmentReport;
 import com.w3prog.personalmanager.R;
 
 public class StartTabActivity extends Activity implements ActionBar.TabListener {
@@ -30,12 +32,22 @@ public class StartTabActivity extends Activity implements ActionBar.TabListener 
 
         tab = bar.newTab();
         tab.setTabListener(this);
+        tab.setText("Контакты в мероприятии");
+        bar.addTab(tab);
+
+        tab = bar.newTab();
+        tab.setTabListener(this);
         tab.setText(getString(R.string.Actions));
         bar.addTab(tab);
 
         tab = bar.newTab();
         tab.setTabListener(this);
         tab.setText(getString(R.string.Tasks));
+        bar.addTab(tab);
+
+        tab = bar.newTab();
+        tab.setTabListener(this);
+        tab.setText(getString(R.string.Report));
         bar.addTab(tab);
 
     }
@@ -53,12 +65,20 @@ public class StartTabActivity extends Activity implements ActionBar.TabListener 
                 ft.add(R.id.fragmentActivity, fragment);
                 break;
             case 1:
+                fragment = new FragmentListPersonInAction();
+                ft.add(R.id.fragmentActivity,fragment);
+                break;
+            case 2:
                 fragment = new FragmentListAction();
                 getActionBar().setTitle(R.string.Actions);
                 ft.replace(R.id.fragmentActivity, fragment);
                 break;
-            case 2:
+            case 3:
                 fragment = new FragmentListTask();
+                ft.add(R.id.fragmentActivity,fragment);
+                break;
+            case 4:
+                fragment = new FragmentReport();
                 ft.add(R.id.fragmentActivity,fragment);
                 break;
         }

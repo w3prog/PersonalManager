@@ -10,7 +10,6 @@ import com.w3prog.personalmanager.Person;
 import com.w3prog.personalmanager.R;
 
 public class FragmentReadPerson extends Fragment {
-    //todo набить данный класс содержимым!
     private Person person;
     private static final String TAG = "FragmentEditPerson";
 
@@ -24,7 +23,7 @@ public class FragmentReadPerson extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.read_person,container,false);
+        View v = inflater.inflate(R.layout.read_person, container, false);
 
         //Пока не определю что конкретно здесь должно отображатся это бессмысленно
         //v.findViewById();

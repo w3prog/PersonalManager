@@ -1,18 +1,22 @@
-package com.w3prog.personalmanager.Fragment;
+package com.w3prog.personalmanager.Fragment.List;
 
 import android.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.w3prog.personalmanager.Activity.ActivityEditPerson;
 import com.w3prog.personalmanager.DataBase;
+import com.w3prog.personalmanager.Fragment.Edit.FragmentEditPerson;
 import com.w3prog.personalmanager.Person;
 import com.w3prog.personalmanager.R;
 
@@ -32,13 +36,30 @@ public class FragmentListPerson extends ListFragment {
         setListAdapter(personAdapter);
     }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        final LayoutInflater inflater = getActivity().getLayoutInflater();
+        View view = (LinearLayout) inflater.inflate(R.layout.footer_list_person, null);
+        Button buttonFooter = (Button) view.findViewById(R.id.FooterListPerson);
+        buttonFooter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                long l = DataBase.Get(getActivity()).insertNewPerson();
+                Intent i = new Intent(getActivity(), ActivityEditPerson.class);
+                i.putExtra(FragmentEditPerson.EXTRA_PERSON_ID, l);
+                startActivity(i);
+            }
+        });
+        getListView().addFooterView(view);
+        super.onActivityCreated(savedInstanceState);
+    }
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        Person c = ((PersonAdapter)getListAdapter()).getItem(position);
+        Person c = ((PersonAdapter) getListAdapter()).getItem(position);
 
-        Intent i = new Intent(getActivity(),ActivityEditPerson.class);
-        i.putExtra(FragmentEditPerson.EXTRA_PERSON_ID,c.getId());
+        Intent i = new Intent(getActivity(), ActivityEditPerson.class);
+        i.putExtra(FragmentEditPerson.EXTRA_PERSON_ID, c.getId());
         startActivity(i);
     }
 
@@ -47,7 +68,6 @@ public class FragmentListPerson extends ListFragment {
         super.onResume();
         //personArrayList.clear();
         personArrayList = DataBase.Get(getActivity()).getPersons();
-        //todo Можно ли это сделать попроще
         PersonAdapter personAdapter = new PersonAdapter(personArrayList);
         setListAdapter(personAdapter);
     }
@@ -62,21 +82,21 @@ public class FragmentListPerson extends ListFragment {
     public class PersonAdapter extends ArrayAdapter<Person> {
 
         public PersonAdapter(ArrayList<Person> Persons) {
-            super(getActivity(),0,Persons);
+            super(getActivity(), 0, Persons);
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            if(convertView == null){
+            if (convertView == null) {
                 convertView = getActivity().getLayoutInflater()
-                        .inflate(R.layout.item_person,null);
+                        .inflate(R.layout.item_person, null);
             }
             Person c = getItem(position);
 
-            TextView textViewName = (TextView)convertView.findViewById(R.id.item_FullName);
-            textViewName.setText(c.getFirstName() + " "  + c.getLastName());
+            TextView textViewName = (TextView) convertView.findViewById(R.id.item_FullName);
+            textViewName.setText(c.getFirstName() + " " + c.getLastName());
 
-            TextView textViewPost = (TextView)convertView.findViewById(R.id.item_post);
+            TextView textViewPost = (TextView) convertView.findViewById(R.id.item_post);
             textViewPost.setText(c.getPost());
 
             return convertView;

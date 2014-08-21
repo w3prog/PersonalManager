@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        style="?android:listSeparatorTextViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Мероприятие"
+        android:layout_gravity="center"
+        android:paddingLeft="60pt"/>
+
+    <Button
+        android:id="@+id/SelectReportTask"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Выберите задачу"/>
+
+    <TextView
+        style="?android:listSeparatorTextViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Участник"
+        android:layout_gravity="center"
+        android:paddingLeft="60pt"      />
+
+    <Button
+        android:id="@+id/SelectReportPerson"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Выберите человека"/>
+
+</LinearLayout>

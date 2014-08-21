@@ -1,6 +1,7 @@
 package com.w3prog.personalmanager;
 
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Action {
@@ -9,6 +10,9 @@ public class Action {
     private String name;
     private Date date;
     private String description;
+    private Task task;
+
+    private ArrayList<Person> PersonsInAction = new ArrayList<Person>();
 
     //Для получения из базы данных
     public Action(long id, String name, Date date, String description) {
@@ -50,5 +54,30 @@ public class Action {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Task getTask() {
+        return task;
+    }
+
+    public void setTask(Task task) {
+        this.task = task;
+    }
+
+    public ArrayList<Person> getPersonsInAction() {
+        return PersonsInAction;
+    }
+    // добавить персону
+    public void addPerson(Person c){
+        PersonsInAction.add(c);
+    }
+
+    //Удалить элемент в коллекцию персон
+    public void removePerson(Person c){
+        PersonsInAction.remove(c);
+    }
+    //заменить элемент в колекции персон
+    public void updatePerson(int id,Person c){
+        PersonsInAction.set(id,c);
     }
 }

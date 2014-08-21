@@ -17,13 +17,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".Activity.ActivityListPerson"/>
-
         <activity android:name=".Activity.ActivityEditPerson"/>
 
         <activity android:name=".Activity.ActivityEditAction"/>
 
         <activity android:name=".Activity.ActivityEditTask"/>
+
+        <activity android:name=".Activity.ActivityEditGroup"/>
 
     </application>
 

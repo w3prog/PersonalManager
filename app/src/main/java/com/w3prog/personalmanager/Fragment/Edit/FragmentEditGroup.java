@@ -1,4 +1,4 @@
-package com.w3prog.personalmanager.Fragment;
+package com.w3prog.personalmanager.Fragment.Edit;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -9,37 +9,37 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.w3prog.personalmanager.DataBase;
+import com.w3prog.personalmanager.Group;
 import com.w3prog.personalmanager.R;
-import com.w3prog.personalmanager.Task;
 
-public class FragmentEditTask extends Fragment {
-    public static final String EXTRA_ACTION_ID = "FragmentEditTask.EXTRA_ACTION_ID";
+public class FragmentEditGroup extends Fragment {
+    public static final String EXTRA_GROUP_ID = "FragmentEditGroup.EXTRA_GROUP_ID";
     private TextView textViewName;
     private TextView textViewDescriproin;
-    private Task task;
-    private static final String TAG = "FragmentEditAction";
+    private Group group;
+    private static final String TAG = "FragmentEditGroup";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        long taskID = getArguments().getLong(EXTRA_ACTION_ID);
+        long groupID = getArguments().getLong(EXTRA_GROUP_ID);
+        Log.e(TAG, Long.toString(groupID));
         setHasOptionsMenu(true);
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
-
-        task = DataBase.Get(getActivity()).getTask(taskID);
+        group = DataBase.Get(getActivity()).getGroup(groupID);
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.edit_action,container,false);
-        textViewName = (TextView)v.findViewById(R.id.TaskName);
+        View view = inflater.inflate(R.layout.edit_group,container,false);
 
-        textViewName.setText(task.getName());
-        textViewName.addTextChangedListener( new TextWatcher() {
+        textViewName = (Button)view.findViewById(R.id.GroupEditTitle);
+        textViewName.setText(group.getName());
+        textViewName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -47,7 +47,7 @@ public class FragmentEditTask extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                task.setName(s.toString());
+                group.setName(s.toString());
             }
 
             @Override
@@ -56,9 +56,8 @@ public class FragmentEditTask extends Fragment {
             }
         });
 
-
-        textViewDescriproin = (TextView)v.findViewById(R.id.TaskDescription);
-        textViewDescriproin.setText(task.getDescription());
+        textViewDescriproin = (Button)view.findViewById(R.id.GroupEditDescription);
+        textViewDescriproin.setText(group.getDescription());
         textViewDescriproin.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -67,7 +66,7 @@ public class FragmentEditTask extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                task.setDescription(s.toString());
+                group.setDescription(s.toString());
             }
 
             @Override
@@ -76,15 +75,13 @@ public class FragmentEditTask extends Fragment {
             }
         });
 
-        return v;
+        return view;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Log.e(TAG, "Активити закрыла сама себя");
                 getActivity().finish();
                 return true;
             default:
@@ -92,23 +89,17 @@ public class FragmentEditTask extends Fragment {
         }
     }
 
-
-    public static FragmentEditAction newInstance(long id){
-        Bundle args = new Bundle();
-        args.putLong(EXTRA_ACTION_ID, id);
-        FragmentEditAction fragment = new FragmentEditAction();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-
     @Override
     public void onPause() {
         super.onPause();
+        DataBase.Get(getActivity()).updateGroup(group.getId(), group);
+    }
 
-        //todo странно что здесь int стоит нужно разобраться можно ли поставить long
-        DataBase.Get(getActivity()).updateTask((int) task.getId(), task);
+    public static Fragment newInstance(long l) {
+        Bundle args = new Bundle();
+        args.putLong(EXTRA_GROUP_ID, l);
+        FragmentEditGroup fragment = new FragmentEditGroup();
+        fragment.setArguments(args);
+        return fragment;
     }
 }
-
-

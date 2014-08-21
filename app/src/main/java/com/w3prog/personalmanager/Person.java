@@ -71,7 +71,6 @@ public class Person {
         Contacts.add(c);
     }
 
-
     //Удалить элемент в коллекцию контактов
     public void removeContect(Contact c){
         Contacts.remove(c);
@@ -79,5 +78,10 @@ public class Person {
     //заменить элемент в колекции контактов
     public void updateContact(int id,Contact c){
         Contacts.set(id,c);
+    }
+
+    @Override
+    public String toString() {
+        return FirstName + " " + LastName;
     }
 }

@@ -1,4 +1,4 @@
-package com.w3prog.personalmanager.Fragment;
+package com.w3prog.personalmanager.Fragment.Dialogs;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -45,23 +45,21 @@ public class TimePickerFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        date = (Date)getArguments().getSerializable(EXTRA_TIME);
+        date = (Date) getArguments().getSerializable(EXTRA_TIME);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         final int year = calendar.get(Calendar.YEAR);
         final int month = calendar.get(Calendar.MONTH);
         final int day = calendar.get(Calendar.DAY_OF_MONTH);
-        int hour =calendar.get(Calendar.HOUR);
-        int minute =calendar.get(Calendar.MINUTE);
-        final int second =calendar.get(Calendar.SECOND);
+        int hour = calendar.get(Calendar.HOUR);
+        int minute = calendar.get(Calendar.MINUTE);
+        final int second = calendar.get(Calendar.SECOND);
 
         View v = getActivity().getLayoutInflater()
                 .inflate(R.layout.dialog_time, null);
-        //todo это метод лучше попробовать заменить другим или даже стандартным
 
-
-        TimePicker timePicker = (TimePicker)v.findViewById(R.id.dialog_time_picker);
+        TimePicker timePicker = (TimePicker) v.findViewById(R.id.dialog_time_picker);
         timePicker.setIs24HourView(true);
         timePicker.setCurrentMinute(minute);
         timePicker.setCurrentHour(hour);

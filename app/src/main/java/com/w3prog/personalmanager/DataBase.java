@@ -33,11 +33,13 @@ public class DataBase {
     private static final String TABLE_GROUP = "groupContact";
     private static final String ROW_GROUP_ID = "id";
     private static final String ROW_GROUP_NAMEGROUP = "NameGroup";
+    private static final String ROW_GROUP_DESCRIPTION = "GroupDescription";
+
     //Таблица TASK
     private static final String TABLE_TASK = "task";
     private static final String ROW_TASK_ID = "id";
     private static final String ROW_TASK_NAME = "NameTask";
-    private static final String ROW_TASK_DESCRIPTION = "Description";
+    private static final String ROW_TASK_DESCRIPTION = "description";
     //Таблица ACTION
     private static final String TABLE_ACTION = "action";
     private static final String ROW_ACTION_ID = "id";
@@ -49,32 +51,45 @@ public class DataBase {
     private static final String TABLE_PERSON_IN_ACTION = "person_in_action";
     private static final String ROW_PERSON_IN_ACTION_ID_PERSION = "idPersion";
     private static final String ROW_PERSON_IN_ACTION_ID_ACTION = "idAction";
+    //пока не определил какие конкретно еще нужны столбцы
+    private static final String ROW_PERSON_IN_ACTION_READY_ = "ready";
     //Таблица PERSON_IN_GROUP
     private static final String TABLE_PERSON_IN_GROUP = "PersonInGroup";
     private static final String ROW_PERSON_IN_GROUP_ID_PERSON = "idPerson";
     private static final String ROW_PERSON_IN_GROUP_ID_GROUP = "idGroup";
 
+
     Context context;
     SQLiteDatabase database;
     private static DataBase sDataBase;
+
     private DataBase(Context context) {
         this.context = context;
         myDataBaseHelper newDBH = new myDataBaseHelper(context);
         database = newDBH.getWritableDatabase();
         generateDataBase();
     }
-//операции с таблицей Person
-    public long insertPerson(Person p){
+
+    //операции с таблицей Person
+    public long insertNewPerson(){
+        ContentValues cv = new ContentValues();
+        cv.put(ROW_PERSON_FIRSTNAME, "");
+        cv.put(ROW_PERSON_LASTNAME, "");
+        cv.put(ROW_PERSON_SRC_IMG, "");
+        cv.put(ROW_PERSON_POST, "");
+        return database.insert(TABLE_PERSON, null, cv);
+    }
+    public long insertPerson(Person p) {
         ContentValues cv = new ContentValues();
         cv.put(ROW_PERSON_FIRSTNAME, p.getFirstName());
-        cv.put(ROW_PERSON_LASTNAME, p.getLastName() );
+        cv.put(ROW_PERSON_LASTNAME, p.getLastName());
         cv.put(ROW_PERSON_SRC_IMG, p.getStrImg());
         cv.put(ROW_PERSON_POST, p.getPost());
-        Log.d(TAG,"Строка " + p.getFirstName() + " " + p.getLastName() + " прошла");
+        Log.d(TAG, "Строка " + p.getFirstName() + " " + p.getLastName() + " прошла");
         return database.insert(TABLE_PERSON, null, cv);
     }
 
-    public void updatePerson( int id, Person p ){
+    public void updatePerson(int id, Person p) {
         ContentValues cv = new ContentValues();
 
         cv.put(ROW_PERSON_ID, p.getId());
@@ -82,26 +97,26 @@ public class DataBase {
         cv.put(ROW_PERSON_LASTNAME, p.getLastName());
         cv.put(ROW_PERSON_SRC_IMG, p.getStrImg());
         cv.put(ROW_PERSON_POST, p.getPost());
-        Log.d(TAG,"Выполнение операций updatePerson id= " +id);
-        int updCount = database.update(TABLE_PERSON, cv, ROW_PERSON_ID + " = ?",
-                new String[] { Integer.toString(id) });
+        Log.d(TAG, "Выполнение операций updatePerson id= " + id);
+        database.update(TABLE_PERSON, cv, ROW_PERSON_ID + " = ?",
+                new String[]{Integer.toString(id)});
 
     }
 
-    public void deletePerson(int id){
-        Log.d(TAG,"Выполнение операций deletePerson для строки с id равным " + id);
+    public void deletePerson(int id) {
+        Log.d(TAG, "Выполнение операций deletePerson для строки с id равным " + id);
         database.delete(TABLE_PERSON, ROW_PERSON_ID + " = " + id, null);
     }
 
-    public Person getPerson(long id){
+    public Person getPerson(long id) {
         Cursor c = database.query(TABLE_PERSON,
                 null,
-                ROW_PERSON_ID+"="+id,
-                null,null,null,null);
+                ROW_PERSON_ID + "=" + id,
+                null, null, null, null);
         Person person;
         Log.d(TAG, "Работа с курсором id = " + id);
 
-        if (c.moveToFirst()){
+        if (c.moveToFirst()) {
             person = new Person(
                     c.getInt(c.getColumnIndex(ROW_PERSON_ID)),
                     c.getString(c.getColumnIndex(ROW_PERSON_FIRSTNAME)),
@@ -109,25 +124,25 @@ public class DataBase {
                     c.getString(c.getColumnIndex(ROW_PERSON_SRC_IMG)),
                     c.getString(c.getColumnIndex(ROW_PERSON_POST))
             );
-            Log.d(TAG,"Работа с курсором завершена");
+            Log.d(TAG, "Работа с курсором завершена");
             return person;
         } else {
-            Log.d(TAG,"Курсор пустой");
+            Log.d(TAG, "Курсор пустой");
             return null;
         }
     }
 
-    public ArrayList<Person> getPersons(){
-        ArrayList<Person>  arrayList = new ArrayList<Person>();
-        Cursor c = database.rawQuery("Select "+ROW_PERSON_ID+", " +
-                ROW_PERSON_FIRSTNAME+", " +
-                ROW_PERSON_LASTNAME+", " +
-                ROW_PERSON_SRC_IMG+", " +
-                ROW_PERSON_POST+" from " + TABLE_PERSON + " "+
-                "order by " + ROW_PERSON_ID,null);
-        if (c.moveToFirst()){
+    public ArrayList<Person> getPersons() {
+        ArrayList<Person> arrayList = new ArrayList<Person>();
+        Cursor c = database.rawQuery("Select " + ROW_PERSON_ID + ", " +
+                ROW_PERSON_FIRSTNAME + ", " +
+                ROW_PERSON_LASTNAME + ", " +
+                ROW_PERSON_SRC_IMG + ", " +
+                ROW_PERSON_POST + " from " + TABLE_PERSON + " " +
+                "order by " + ROW_PERSON_ID, null);
+        if (c.moveToFirst()) {
             do {
-                arrayList.add( new Person(
+                arrayList.add(new Person(
                         c.getInt(c.getColumnIndex(ROW_PERSON_ID)),
                         c.getString(c.getColumnIndex(ROW_PERSON_FIRSTNAME)),
                         c.getString(c.getColumnIndex(ROW_PERSON_LASTNAME)),
@@ -136,24 +151,24 @@ public class DataBase {
                 ));
                 c.moveToNext();
             } while (c.isAfterLast() == false);
-            Log.d(TAG,"Работа с курсором завершена getPersons");
+            Log.d(TAG, "Работа с курсором завершена getPersons");
         } else {
-            Log.d(TAG,"Курсор c группами событий getPersons пустой");
+            Log.d(TAG, "Курсор c группами событий getPersons пустой");
         }
         return arrayList;
     }
 //Конец операций с таблицей Person
 
 //Операции с таблицей Contacts
-    public long insertContact(Contact c){
+    public long insertContact(Contact c) {
         ContentValues cv = new ContentValues();
         cv.put(ROW_CONTACT_ID_PERSON, c.getIdPerson());
-        cv.put(ROW_CONTACT_TYPE, c.getType() );
+        cv.put(ROW_CONTACT_TYPE, c.getType());
         cv.put(ROW_CONTACT_DESCRIPTION, c.getDescription());
         return database.insert(TABLE_CONTACT, null, cv);
     }
 
-    public void updateContact(int id,Contact c){
+    public void updateContact(int id, Contact c) {
         ContentValues cv = new ContentValues();
 
         cv.put(ROW_CONTACT_ID, c.getIdContact());
@@ -161,49 +176,49 @@ public class DataBase {
         cv.put(ROW_CONTACT_TYPE, c.getType());
         cv.put(ROW_CONTACT_DESCRIPTION, c.getDescription());
         Log.d(TAG, "Выполнение операций updateContact id= " + id);
-        int updCount = database.update(TABLE_CONTACT, cv, ROW_CONTACT_ID + " = ?",
-                new String[] { Integer.toString(id) });
+        database.update(TABLE_CONTACT, cv, ROW_CONTACT_ID + " = ?",
+                new String[]{Integer.toString(id)});
     }
 
-    public void deleteContact(int id){
-        Log.d(TAG,"Выполнение операций deleteContact для строки с id равным " + id);
+    public void deleteContact(int id) {
+        Log.d(TAG, "Выполнение операций deleteContact для строки с id равным " + id);
         database.delete(TABLE_CONTACT, ROW_CONTACT_ID + " = " + id, null);
     }
-
-    public Contact getContact(int id){
+        //скорее всего не понадобится
+    public Contact getContact(int id) {
 
         Cursor c = database.query(TABLE_CONTACT,
                 null,
-                ROW_CONTACT_ID+"="+id,
-                null,null,null,null);
+                ROW_CONTACT_ID + "=" + id,
+                null, null, null, null);
         Contact contact;
         Log.d(TAG, "Работа с курсором getContact id = " + id);
 
-        if (c.moveToFirst()){
+        if (c.moveToFirst()) {
             contact = new Contact(
                     c.getInt(c.getColumnIndex(ROW_CONTACT_ID)),
                     c.getInt(c.getColumnIndex(ROW_CONTACT_ID_PERSON)),
                     c.getString(c.getColumnIndex(ROW_CONTACT_TYPE)),
                     c.getString(c.getColumnIndex(ROW_CONTACT_DESCRIPTION))
             );
-            Log.d(TAG,"Работа с курсором завершена");
+            Log.d(TAG, "Работа с курсором завершена");
             return contact;
         } else {
-            Log.d(TAG,"Курсор пустой");
+            Log.d(TAG, "Курсор пустой");
             return null;
         }
     }
-
-    public  ArrayList<Contact> getContacts(){
-        ArrayList<Contact>  arrayList = new ArrayList<Contact>();
-        Cursor c = database.rawQuery("Select "+ROW_CONTACT_ID+", " +
-                ROW_CONTACT_ID_PERSON+", " +
-                ROW_CONTACT_TYPE+", " +
-                ROW_CONTACT_DESCRIPTION+" from " + TABLE_CONTACT + " "+
-                "order by " + ROW_CONTACT_ID,null);
-        if (c.moveToFirst()){
+        //скорее всего не понадобится
+    public ArrayList<Contact> getContacts() {
+        ArrayList<Contact> arrayList = new ArrayList<Contact>();
+        Cursor c = database.rawQuery("Select " + ROW_CONTACT_ID + ", " +
+                ROW_CONTACT_ID_PERSON + ", " +
+                ROW_CONTACT_TYPE + ", " +
+                ROW_CONTACT_DESCRIPTION + " from " + TABLE_CONTACT + " " +
+                "order by " + ROW_CONTACT_ID, null);
+        if (c.moveToFirst()) {
             do {
-                arrayList.add( new Contact(
+                arrayList.add(new Contact(
                         c.getInt(c.getColumnIndex(ROW_CONTACT_ID)),
                         c.getInt(c.getColumnIndex(ROW_CONTACT_ID_PERSON)),
                         c.getString(c.getColumnIndex(ROW_CONTACT_TYPE)),
@@ -211,30 +226,23 @@ public class DataBase {
                 ));
                 c.moveToNext();
             } while (c.isAfterLast() == false);
-            Log.d(TAG,"Работа с курсором завершена getContacts");
+            Log.d(TAG, "Работа с курсором завершена getContacts");
         } else {
-            Log.d(TAG,"Курсор c группами событий getContacts пустой");
+            Log.d(TAG, "Курсор c группами событий getContacts пустой");
         }
         return arrayList;
     }
 
-    public ArrayList<Contact> getPhoneContactPerson(Person person){
-        ArrayList<Contact>  arrayList = new ArrayList<Contact>();
-        /*Cursor c = database.rawQuery("Select "+ROW_CONTACT_ID+", " +
-                ROW_CONTACT_ID_PERSON+", " +
-                ROW_CONTACT_TYPE+", " +
-                ROW_CONTACT_DESCRIPTION+" from " + TABLE_CONTACT + " "+
-                "where " + ROW_CONTACT_ID_PERSON + person.getId()+
-                    //    " and "+ROW_CONTACT_TYPE +" = Phone "+
-                "order by " + ROW_CONTACT_ID,null);*/
+    public ArrayList<Contact> getPhoneContactPerson(Person person) {
+        ArrayList<Contact> arrayList = new ArrayList<Contact>();
         Cursor c = database.query(TABLE_CONTACT,
                 null,
-                ROW_CONTACT_ID_PERSON+"="+person.getId(),
-                null,null,null,null);
+                ROW_CONTACT_ID_PERSON + "=" + person.getId(),
+                null, null, null, null);
 
-        if (c.moveToFirst()){
+        if (c.moveToFirst()) {
             do {
-                arrayList.add( new Contact(
+                arrayList.add(new Contact(
                         c.getInt(c.getColumnIndex(ROW_CONTACT_ID)),
                         c.getInt(c.getColumnIndex(ROW_CONTACT_ID_PERSON)),
                         c.getString(c.getColumnIndex(ROW_CONTACT_TYPE)),
@@ -242,49 +250,68 @@ public class DataBase {
                 ));
                 c.moveToNext();
             } while (c.isAfterLast() == false);
-            Log.d(TAG,"Работа с курсором завершена getContacts");
+            Log.d(TAG, "Работа с курсором завершена getContacts");
         } else {
-            Log.d(TAG,"Курсор c группами событий getContacts пустой");
+            Log.d(TAG, "Курсор c группами событий getContacts пустой");
         }
         return arrayList;
     }
 //Окончание операций с таблицей Contacts
-
-// начало операций с таблицей Action
-    //todo я модернизировал таблицу нужно изменить методы под новую таблицу изменения
-    public long insertAction(Action c){
+    // начало операций с таблицей Action
+    public long insertNewAction() {
         ContentValues cv = new ContentValues();
-        cv.put(ROW_ACTION_NAME, c.getName());
-        cv.put(ROW_ACTION_DATE, c.getDate().toString() );
-        cv.put(ROW_ACTION_DESCRIPTION,c.getDescription());
+        cv.put(ROW_ACTION_NAME, "");
+        cv.put(ROW_ACTION_DESCRIPTION, "");
+        cv.put(ROW_ACTION_DATE, "");
+
         return database.insert(TABLE_ACTION, null, cv);
     }
 
-    public void updateAction(int id,Action c){
+    public long insertAction(Action c) {
         ContentValues cv = new ContentValues();
-
-        cv.put(ROW_ACTION_ID, id);
         cv.put(ROW_ACTION_NAME, c.getName());
-        cv.put(ROW_ACTION_DATE, c.getDate().toString() );
-        cv.put(ROW_ACTION_DESCRIPTION,c.getDescription());
-        Log.d(TAG, "Выполнение операций updateContact id= " + id);
-        int updCount = database.update(TABLE_ACTION, cv, ROW_ACTION_ID + " = ?",
-                new String[] { Integer.toString(id) });
+        cv.put(ROW_ACTION_DATE, c.getDate().toString());
+        cv.put(ROW_ACTION_DESCRIPTION, c.getDescription());
+        return database.insert(TABLE_ACTION, null, cv);
     }
 
-    public void deleteAction(int id){
-        Log.d(TAG,"Выполнение операций deleteContact для строки с id равным " + id);
+    public long insertAction(Action c, Task task) {
+        ContentValues cv = new ContentValues();
+        cv.put(ROW_ACTION_NAME, c.getName());
+        cv.put(ROW_ACTION_DATE, c.getDate().toString());
+        cv.put(ROW_ACTION_DESCRIPTION, c.getDescription());
+        cv.put(ROW_ACTION_TASK_ID, task.getId());
+        return database.insert(TABLE_ACTION, null, cv);
+    }
+
+    public void updateAction(int id, Action c) {
+        ContentValues cv = new ContentValues();
+        //тип int
+        cv.put(ROW_ACTION_ID, id);
+        cv.put(ROW_ACTION_NAME, c.getName());
+        cv.put(ROW_ACTION_DATE, c.getDate().toString());
+        cv.put(ROW_ACTION_DESCRIPTION, c.getDescription());
+        if (c.getTask() != null){
+            cv.put(ROW_ACTION_TASK_ID,c.getTask().getId());
+        }
+        Log.d(TAG, "Выполнение операций updateContact id= " + id);
+        int updCount = database.update(TABLE_ACTION, cv, ROW_ACTION_ID + " = ?",
+                new String[]{Integer.toString(id)});
+    }
+
+    public void deleteAction(int id) {
+        Log.d(TAG, "Выполнение операций deleteContact для строки с id равным " + id);
         database.delete(TABLE_ACTION, ROW_ACTION_ID + " = " + id, null);
     }
 
-    public Action getAction(long id){
-
+    public Action getAction(long id) {
+        //todo нужно решить проблему со ссылками
         Cursor c = database.query(TABLE_ACTION,
                 null,
-                ROW_ACTION_ID+"="+id,
-                null,null,null,null);
+                ROW_ACTION_ID + "=" + id,
+                null, null, null, null);
         Action action;
-        if (c.moveToFirst()){
+        if (c.moveToFirst()) {
             //todo Выписывает исключение не очень хорошо
 
             Date newDate = null;
@@ -292,10 +319,10 @@ public class DataBase {
                 newDate = new SimpleDateFormat()
                         .parse(c.getString(c.getColumnIndex(ROW_ACTION_DATE)));
             } catch (ParseException e) {
-                Log.d(TAG,"Ошибка Парсинга данных");
+                Log.d(TAG, "Ошибка Парсинга данных");
                 e.printStackTrace();
             }
-            if( newDate == null ) newDate =new Date();
+            if (newDate == null) newDate = new Date();
 
             action = new Action(
                     c.getInt(c.getColumnIndex(ROW_ACTION_ID)),
@@ -303,22 +330,24 @@ public class DataBase {
                     newDate,
                     c.getString(c.getColumnIndex(ROW_ACTION_DESCRIPTION))
             );
-            Log.d(TAG,"Работа с курсором завершена");
+            Task task = getTask(c.getLong(c.getColumnIndex(ROW_ACTION_TASK_ID)));
+            action.setTask(task);
+            Log.d(TAG, "Работа с курсором завершена");
             return action;
         } else {
-            Log.e(TAG,"Курсор пустой");
+            Log.e(TAG, "Курсор пустой");
             return null;
         }
     }
 
-    public  ArrayList<Action> getActions(){
-        ArrayList<Action>  arrayList = new ArrayList<Action>();
-        Cursor c = database.rawQuery("Select "+ROW_ACTION_ID+", " +
-                ROW_ACTION_NAME+", " +
-                ROW_ACTION_DATE+", " +
-                ROW_ACTION_DESCRIPTION+" from " + TABLE_ACTION + " "+
-                "order by " + ROW_ACTION_ID,null);
-        if (c.moveToFirst()){
+    public ArrayList<Action> getActions() {
+        ArrayList<Action> arrayList = new ArrayList<Action>();
+        Cursor c = database.rawQuery("Select " + ROW_ACTION_ID + ", " +
+                ROW_ACTION_NAME + ", " +
+                ROW_ACTION_DATE + ", " +
+                ROW_ACTION_DESCRIPTION + " from " + TABLE_ACTION + " " +
+                "order by " + ROW_ACTION_ID, null);
+        if (c.moveToFirst()) {
             do {
 
                 Date newDate = null;
@@ -326,12 +355,12 @@ public class DataBase {
                     newDate = new SimpleDateFormat()
                             .parse(c.getString(c.getColumnIndex(ROW_ACTION_DATE)));
                 } catch (ParseException e) {
-                    Log.d(TAG,"Ошибка Парсинга данных");
+                    Log.d(TAG, "Ошибка Парсинга данных");
                     e.printStackTrace();
                 }
-                if( newDate == null ) newDate =new Date();
+                if (newDate == null) newDate = new Date();
 
-                arrayList.add( new Action(
+                arrayList.add(new Action(
                         c.getInt(c.getColumnIndex(ROW_ACTION_ID)),
                         c.getString(c.getColumnIndex(ROW_ACTION_NAME)),
                         newDate,
@@ -339,34 +368,77 @@ public class DataBase {
                 ));
                 c.moveToNext();
             } while (c.isAfterLast() == false);
-            Log.d(TAG,"Работа с курсором завершена getActions");
+            Log.d(TAG, "Работа с курсором завершена getActions");
         } else {
-            Log.d(TAG,"Курсор c группами событий getActions пустой");
+            Log.d(TAG, "Курсор c группами событий getActions пустой");
         }
         return arrayList;
     }
 
-    public ArrayList<Action> getActionsOfContacts(Contact contact){
-        //Придется добавить еще одну таблицу
-        return null;
+    public ArrayList<Action> getActionOfTask(Task task) {
+        ArrayList<Action> arrayList = new ArrayList<Action>();
+        /*
+        Cursor c = database.query("Select " + ROW_ACTION_ID + ", " +
+                ROW_ACTION_NAME + ", " +
+                ROW_ACTION_DATE + ", " +
+                ROW_ACTION_TASK_ID + ", " +
+                ROW_ACTION_DESCRIPTION + " from " + TABLE_ACTION + " " +
+                " while " + ROW_ACTION_TASK_ID + " = " + task.getId() +
+                "order by " + ROW_ACTION_ID, null);
+        */
+        Cursor c = database.query(TABLE_ACTION,
+                null,
+                ROW_ACTION_TASK_ID + "=" + task.getId(),
+                null, null, null, null);
+
+        if (c.moveToFirst()) {
+            do {
+
+                Date newDate = null;
+                try {
+                    newDate = new SimpleDateFormat()
+                            .parse(c.getString(c.getColumnIndex(ROW_ACTION_DATE)));
+                } catch (ParseException e) {
+                    Log.d(TAG, "Ошибка Парсинга данных");
+                    e.printStackTrace();
+                }
+                if (newDate == null) newDate = new Date();
+
+                arrayList.add(new Action(
+                        c.getInt(c.getColumnIndex(ROW_ACTION_ID)),
+                        c.getString(c.getColumnIndex(ROW_ACTION_NAME)),
+                        newDate,
+                        c.getString(c.getColumnIndex(ROW_ACTION_DESCRIPTION))
+                ));
+                c.moveToNext();
+            } while (c.isAfterLast() == false);
+            Log.d(TAG, "Работа с курсором завершена getActions");
+        } else {
+            Log.d(TAG, "Курсор c группами событий getActions пустой");
+        }
+        return arrayList;
     }
 
-    public ArrayList<Action> getActionofTask(Contact contact,Task task){
-        //Придется добавить сложный запрос к базе данных
-        return null;
-    }
-// конец операция с таблицей Actions
+    // конец операция с таблицей Actions
 // начало операций с таблицей Task
-    public long insertTask(Task task){
+
+    //скорее всего не понадобится
+    public long insertTask(Task task) {
         ContentValues cv = new ContentValues();
         cv.put(ROW_TASK_NAME, task.getName());
         cv.put(ROW_TASK_DESCRIPTION, task.getDescription());
         return database.insert(TABLE_TASK, null, cv);
     }
 
+    public long insertNewTask() {
+        ContentValues cv = new ContentValues();
+        cv.put(ROW_TASK_NAME, "");
+        cv.put(ROW_TASK_DESCRIPTION, "");
+        return database.insert(TABLE_TASK, null, cv);
+    }
+
     public void updateTask(int id, Task task) {
         ContentValues cv = new ContentValues();
-
         cv.put(ROW_TASK_ID, id);
         cv.put(ROW_TASK_NAME, task.getName());
         cv.put(ROW_ACTION_DESCRIPTION, task.getDescription());
@@ -374,7 +446,8 @@ public class DataBase {
                 new String[]{Integer.toString(id)});
     }
 
-    public void deleteTask(int id){
+    public void deleteTask(long id) {
+        database.delete(TABLE_ACTION,ROW_ACTION_TASK_ID + " = " + id,null);
         database.delete(TABLE_TASK, ROW_TASK_ID + " = " + id, null);
     }
 
@@ -382,10 +455,10 @@ public class DataBase {
 
         Cursor c = database.query(TABLE_TASK,
                 null,
-                ROW_TASK_ID+"="+taskID,
-                null,null,null,null);
+                ROW_TASK_ID + "=" + taskID,
+                null, null, null, null);
         Task task;
-        if (c.moveToFirst()){
+        if (c.moveToFirst()) {
 
             task = new Task(
                     c.getInt(c.getColumnIndex(ROW_TASK_ID)),
@@ -399,15 +472,16 @@ public class DataBase {
     }
 
     public ArrayList<Task> getTasks() {
-        ArrayList<Task>  arrayList = new ArrayList<Task>();
-        Cursor c = database.rawQuery("Select "+ROW_TASK_ID+", " +
-                ROW_TASK_NAME+", " +
-                ROW_TASK_DESCRIPTION+" from " + TABLE_TASK + " "+
-                "order by " + ROW_TASK_ID,null);
-        if (c.moveToFirst()){
+        ArrayList<Task> arrayList = new ArrayList<Task>();
+        Cursor c = database.rawQuery("Select " + ROW_TASK_ID + ", " +
+                ROW_TASK_NAME + ", " +
+                ROW_TASK_DESCRIPTION +
+                " from " + TABLE_TASK + " " +
+                "order by " + ROW_TASK_ID, null);
+        if (c.moveToFirst()) {
             do {
 
-                arrayList.add( new Task(
+                arrayList.add(new Task(
                         c.getInt(c.getColumnIndex(ROW_TASK_ID)),
                         c.getString(c.getColumnIndex(ROW_TASK_NAME)),
                         c.getString(c.getColumnIndex(ROW_TASK_DESCRIPTION))
@@ -418,69 +492,272 @@ public class DataBase {
         return arrayList;
     }
 // Конец операций с таблицей Task
-    public void generateDataBase(){
+
+    //Начало операции с таблице персоны в мероприятии
+    public long insertRowPersonInAction(long personIN, long actionId) {
+        ContentValues cv = new ContentValues();
+        cv.put(ROW_PERSON_IN_ACTION_ID_ACTION, actionId);
+        cv.put(ROW_PERSON_IN_ACTION_ID_PERSION, personIN);
+        return database.insert(TABLE_PERSON_IN_ACTION, null, cv);
+    }
+
+    public void deleteRowPersonInAction(long personId, long actionId) {
+        database.delete(TABLE_PERSON_IN_ACTION,
+                ROW_PERSON_IN_ACTION_ID_ACTION + " = " + actionId + " and " +
+                        ROW_PERSON_IN_ACTION_ID_PERSION + " = " + personId, null
+        );
+    }
+
+    public ArrayList<Person> getRowsPersonInAction(Action action) {
+        long actionID = action.getId();
+        Cursor c = database.rawQuery("Select " + ROW_PERSON_ID + ", " +
+                ROW_PERSON_FIRSTNAME + ", " +
+                ROW_PERSON_LASTNAME + ", " +
+                ROW_PERSON_SRC_IMG + ", " +
+                ROW_PERSON_POST + " from " + TABLE_PERSON + " as TP "+ " inner join " +
+                TABLE_PERSON_IN_ACTION + " as PA" + " on " + "TP." + ROW_PERSON_ID + "="+
+                "PA." +ROW_PERSON_IN_ACTION_ID_PERSION + " where " +
+                ROW_PERSON_IN_ACTION_ID_ACTION + "=" +actionID +
+                "  ",null);
+        ArrayList<Person> arrayList = new ArrayList<Person>();
+        if (c.moveToFirst()) {
+            do {
+                arrayList.add(new Person(
+                        c.getInt(c.getColumnIndex(ROW_PERSON_ID)),
+                        c.getString(c.getColumnIndex(ROW_PERSON_FIRSTNAME)),
+                        c.getString(c.getColumnIndex(ROW_PERSON_LASTNAME)),
+                        c.getString(c.getColumnIndex(ROW_PERSON_SRC_IMG)),
+                        c.getString(c.getColumnIndex(ROW_PERSON_POST))
+                ));
+                c.moveToNext();
+            } while (c.isAfterLast() == false);
+        } else {
+            return null;
+        }
+        return arrayList;
+    }
+    //Конец операции с таблицей персоны в мероприятии
+
+    //начало операций с таблицей group
+    public long insertNewGroup(){
+        ContentValues cv = new ContentValues();
+        cv.put(ROW_GROUP_NAMEGROUP, "");
+        cv.put(ROW_GROUP_DESCRIPTION, "");
+        return database.insert(TABLE_GROUP, null, cv);
+    }
+
+    public long insertGroup(Group group){
+        ContentValues cv = new ContentValues();
+        cv.put(ROW_GROUP_NAMEGROUP, group.getName());
+        cv.put(ROW_GROUP_DESCRIPTION, group.getDescription());
+        return database.insert(TABLE_GROUP, null, cv);
+    }
+
+    public void updateGroup( long id ,Group group){
+        ContentValues cv = new ContentValues();
+        cv.put(ROW_TASK_ID, id);
+        cv.put(ROW_TASK_NAME, group.getName());
+        cv.put(ROW_ACTION_DESCRIPTION, group.getDescription());
+        database.update(TABLE_TASK, cv, ROW_TASK_ID + " = ?",
+                new String[]{Long.toString(id)});
+    }
+
+    public void deleteGroup(Long l){
+        database.delete(TABLE_GROUP, ROW_GROUP_ID + " = " + l, null);
+    }
+
+    public Group getGroup(long groupID) {
+        Cursor c = database.query(TABLE_GROUP,null,
+                ROW_TASK_ID + "=" + groupID,
+                null, null, null, null);
+        Group group;
+        if (c.moveToFirst()) {
+            group = new Group(
+                    c.getInt(c.getColumnIndex(ROW_GROUP_ID)),
+                    c.getString(c.getColumnIndex(ROW_GROUP_NAMEGROUP)),
+                    c.getString(c.getColumnIndex(ROW_GROUP_DESCRIPTION))
+            );
+            return group;
+        } else {
+            return null;
+        }
+    }
+
+    public ArrayList<Group> getGroups(){
+        ArrayList<Group> arrayList = new ArrayList<Group>();
+        Cursor c = database.rawQuery("Select " + ROW_GROUP_ID + ", " +
+                ROW_GROUP_NAMEGROUP + ", " +
+                ROW_GROUP_DESCRIPTION +
+                " from " + TABLE_GROUP + " " +
+                "order by " + ROW_GROUP_ID, null);
+        if (c.moveToFirst()) {
+            do {
+                arrayList.add(new Group(
+                        c.getInt(c.getColumnIndex(ROW_GROUP_ID)),
+                        c.getString(c.getColumnIndex(ROW_GROUP_NAMEGROUP)),
+                        c.getString(c.getColumnIndex(ROW_GROUP_DESCRIPTION))
+                ));
+                c.moveToNext();
+            } while (c.isAfterLast() == false);
+        }
+        return arrayList;
+    }
+
+    // конец операций с таблицей group
+
+    //Начало операция с таблице person in group
+    public long insertRowPersonInGroup(long personId, long groupId) {
+        ContentValues cv = new ContentValues();
+        cv.put(ROW_PERSON_IN_GROUP_ID_PERSON, personId);
+        cv.put(ROW_PERSON_IN_GROUP_ID_GROUP, groupId);
+        return database.insert(TABLE_PERSON_IN_GROUP, null, cv);
+    }
+
+    public void deleteRowPersonInGroup(long personId, long groupId) {
+        database.delete(TABLE_PERSON_IN_GROUP,
+                ROW_PERSON_IN_GROUP_ID_PERSON + " = " + personId + " and " +
+                        ROW_PERSON_IN_GROUP_ID_GROUP + " = " + groupId, null
+        );
+    }
+
+    public ArrayList<Person> getRowsPersonInGroup(Group group) {
+        long groupID = group.getId();
+        Cursor c = database.rawQuery("Select " + ROW_PERSON_ID + ", " +
+                ROW_PERSON_FIRSTNAME + ", " +
+                ROW_PERSON_LASTNAME + ", " +
+                ROW_PERSON_SRC_IMG + ", " +
+                ROW_PERSON_POST + " from " + TABLE_PERSON + " as TP "+ " inner join " +
+                TABLE_PERSON_IN_GROUP + " as PG" + " on " + "TP." + ROW_PERSON_ID + "="+
+                "PG." +ROW_PERSON_IN_GROUP_ID_PERSON + " where " +
+                ROW_PERSON_IN_GROUP_ID_GROUP + "=" +groupID,null);
+        ArrayList<Person> arrayList = new ArrayList<Person>();
+        if (c.moveToFirst()) {
+            do {
+                arrayList.add(new Person(
+                        c.getInt(c.getColumnIndex(ROW_PERSON_ID)),
+                        c.getString(c.getColumnIndex(ROW_PERSON_FIRSTNAME)),
+                        c.getString(c.getColumnIndex(ROW_PERSON_LASTNAME)),
+                        c.getString(c.getColumnIndex(ROW_PERSON_SRC_IMG)),
+                        c.getString(c.getColumnIndex(ROW_PERSON_POST))
+                ));
+                c.moveToNext();
+            } while (c.isAfterLast() == false);
+        } else {
+            return null;
+        }
+        return arrayList;
+    }
+
+    //Конец операции с таблице person in group
+
+    //основной отчет возращает операции выполненные одной персоной в одной задаче
+    public ArrayList<Action> getReportPersonActionIntask(Person person, Task task) {
+        long personID = person.getId();
+        long taskID = task.getId();
+
+        Cursor c = database.rawQuery("Select " + ROW_ACTION_ID + ", " +
+                ROW_ACTION_NAME + ", " +
+                ROW_ACTION_DESCRIPTION + ", " +
+                ROW_ACTION_DATE + ", " +
+                ROW_ACTION_TASK_ID + " from " + TABLE_ACTION + " as TA "+
+                " inner join " + TABLE_PERSON_IN_ACTION + " as PA" +
+                " on " + "TA." + ROW_ACTION_ID + "="+
+                "PA." +ROW_PERSON_IN_ACTION_ID_ACTION + " where " +
+                ROW_PERSON_IN_ACTION_ID_PERSION + "=" +personID +
+                " and " + ROW_ACTION_TASK_ID + "=" +taskID,null);
+        ArrayList<Action> arrayList = new ArrayList<Action>();
+        if (c.moveToFirst()) {
+            do {
+
+                Date newDate = null;
+                try {
+                    newDate = new SimpleDateFormat()
+                            .parse(c.getString(c.getColumnIndex(ROW_ACTION_DATE)));
+                } catch (ParseException e) {
+                    Log.e(TAG, "Ошибка Парсинга данных");
+                    e.printStackTrace();
+                }
+                if (newDate == null) newDate = new Date();
+
+                arrayList.add(new Action(
+                        c.getInt(c.getColumnIndex(ROW_ACTION_ID)),
+                        c.getString(c.getColumnIndex(ROW_ACTION_NAME)),
+                        newDate,
+                        c.getString(c.getColumnIndex(ROW_ACTION_DESCRIPTION))
+                ));
+                c.moveToNext();
+            } while (c.isAfterLast() == false);
+        } else {
+            return null;
+        }
+        return arrayList;
+    }
+
+    public void generateDataBase() {
 
         database.delete(TABLE_ACTION, "", null);
         database.delete(TABLE_PERSON, "", null);
         database.delete(TABLE_CONTACT, "", null);
 
 
-        long person1 = insertPerson(new Person("Иван","Иванов","","Участник"));
-        long person2 = insertPerson(new Person("Петр","Пертров","","Участник"));
-        long person3 = insertPerson(new Person("Владимир","Сидоров","","Участник"));
-        long person4 = insertPerson(new Person("Игорь","Васнецов","","Участник"));
-        long person5 = insertPerson(new Person("Александр","Пушкин","","Участник"));
-        long person6 = insertPerson(new Person("Константин","Новожилов","","Участник"));
+        long person1 = insertPerson(new Person("Иван", "Иванов", "", "Участник"));
+        long person2 = insertPerson(new Person("Петр", "Пертров", "", "Участник"));
+        long person3 = insertPerson(new Person("Владимир", "Сидоров", "", "Участник"));
+        long person4 = insertPerson(new Person("Игорь", "Васнецов", "", "Участник"));
+        long person5 = insertPerson(new Person("Александр", "Пушкин", "", "Участник"));
+        long person6 = insertPerson(new Person("Константин", "Новожилов", "", "Участник"));
 
-        insertContact(new Contact(person1,"Phone","12345"));
-        insertContact(new Contact(person1,"Email","23456"));
-        insertContact(new Contact(person1,"WebSite","www.vk.com/person"));
-        insertContact(new Contact(person1,"WebSite","www.mail.com/person"));
+        insertContact(new Contact(person1, "Phone", "12345"));
+        insertContact(new Contact(person1, "Email", "23456"));
+        insertContact(new Contact(person1, "WebSite", "www.vk.com/person"));
+        insertContact(new Contact(person1, "WebSite", "www.mail.com/person"));
 
-        insertContact(new Contact(person2,"Phone","90123"));
-        insertContact(new Contact(person2,"Phone","01234"));
-        insertContact(new Contact(person2,"Phone","13456"));
-        insertContact(new Contact(person2,"Phone","24567"));
+        insertContact(new Contact(person2, "Phone", "90123"));
+        insertContact(new Contact(person2, "Phone", "01234"));
+        insertContact(new Contact(person2, "Phone", "13456"));
+        insertContact(new Contact(person2, "Phone", "24567"));
 
-        insertContact(new Contact(person3,"Phone","35678"));
-        insertContact(new Contact(person3,"Phone","46789"));
-        insertContact(new Contact(person3,"Phone","57890"));
-        insertContact(new Contact(person3,"Phone","68901"));
+        insertContact(new Contact(person3, "Phone", "35678"));
+        insertContact(new Contact(person3, "Phone", "46789"));
+        insertContact(new Contact(person3, "Phone", "57890"));
+        insertContact(new Contact(person3, "Phone", "68901"));
 
-        insertContact(new Contact(person4,"Phone","12345"));
-        insertContact(new Contact(person4,"Phone","23456"));
-        insertContact(new Contact(person4,"Phone","34567"));
-        insertContact(new Contact(person4,"Phone","45678"));
+        insertContact(new Contact(person4, "Phone", "12345"));
+        insertContact(new Contact(person4, "Phone", "23456"));
+        insertContact(new Contact(person4, "Phone", "34567"));
+        insertContact(new Contact(person4, "Phone", "45678"));
 
-        insertContact(new Contact(person5,"Phone","90123"));
-        insertContact(new Contact(person5,"Phone","01234"));
-        insertContact(new Contact(person5,"Phone","13456"));
-        insertContact(new Contact(person5,"Phone","24567"));
+        insertContact(new Contact(person5, "Phone", "90123"));
+        insertContact(new Contact(person5, "Phone", "01234"));
+        insertContact(new Contact(person5, "Phone", "13456"));
+        insertContact(new Contact(person5, "Phone", "24567"));
 
-        insertContact(new Contact(person6,"Phone","35678"));
-        insertContact(new Contact(person6,"Phone","46789"));
-        insertContact(new Contact(person6,"Phone","57890"));
-        insertContact(new Contact(person6,"Phone","68901"));
+        insertContact(new Contact(person6, "Phone", "35678"));
+        insertContact(new Contact(person6, "Phone", "46789"));
+        insertContact(new Contact(person6, "Phone", "57890"));
+        insertContact(new Contact(person6, "Phone", "68901"));
 
-        insertAction(new Action("Инвентаризация", new Date(),""));
-        insertAction(new Action("Получить товары от заказчика", new Date(),""));
-        insertAction(new Action("Встеча с ОАО Азот", new Date(),""));
+        insertAction(new Action("Инвентаризация", new Date(), ""));
+        insertAction(new Action("Получить товары от заказчика", new Date(), ""));
+        insertAction(new Action("Встеча с ОАО Азот", new Date(), ""));
     }
 
-    public static DataBase Get(Context newContext){
+    public static DataBase Get(Context newContext) {
         if (sDataBase == null)
             sDataBase = new DataBase(newContext);
         return sDataBase;
     }
 
-
-
-
-    private class myDataBaseHelper extends SQLiteOpenHelper{
+    public ArrayList<Action> getReportPersonActionInDate(Person person,
+                                                         java.sql.Date dateLast,
+                                                         java.sql.Date dateNew) {
+        return null;
+    }
+    private class myDataBaseHelper extends SQLiteOpenHelper {
 
         private static final String TAG = "DataBase.myDataBaseHelper";
-        private static final String DATA_BASE_NAME = "PrilName";
-        private static final int DATA_BASE_VERSION = 2;
+        private static final String DATA_BASE_NAME = "PersonManagersDataBase";
+        private static final int DATA_BASE_VERSION = 1;
 
 
         public myDataBaseHelper(Context context) {
@@ -493,46 +770,46 @@ public class DataBase {
 
         }
 
-        private void createTable(SQLiteDatabase db){
-            db.execSQL("create table "+TABLE_PERSON+ "("
-                    +ROW_PERSON_ID+" integer primary key autoincrement, "
-                    +ROW_PERSON_FIRSTNAME+" text, "
-                    +ROW_PERSON_LASTNAME+" text, "
-                    +ROW_PERSON_SRC_IMG+" text, "
-                    +ROW_PERSON_POST+" text" +");");
+        private void createTable(SQLiteDatabase db) {
+            db.execSQL("create table " + TABLE_PERSON + "("
+                    + ROW_PERSON_ID + " integer primary key autoincrement, "
+                    + ROW_PERSON_FIRSTNAME + " text, "
+                    + ROW_PERSON_LASTNAME + " text, "
+                    + ROW_PERSON_SRC_IMG + " text, "
+                    + ROW_PERSON_POST + " text" + ");");
 
-            db.execSQL("create table "+TABLE_CONTACT+ "("
-                    +ROW_CONTACT_ID+" integer primary key autoincrement, "
-                    +ROW_CONTACT_ID_PERSON+" integer, "
-                    +ROW_CONTACT_TYPE+" text, "
-                    +ROW_CONTACT_DESCRIPTION+" text" +");");
-/*todo пока без обойдусь без этого функционала
-            db.execSQL("create table "+TABLE_GROUP+ "("
-                    +ROW_GROUP_ID+" integer primary key autoincrement, "
-                    +ROW_GROUP_NAMEGROUP+" text" +");");
-*/
-            db.execSQL("create table "+TABLE_TASK+ "("
-                    +ROW_TASK_ID+" integer primary key autoincrement, "
-                    +ROW_TASK_NAME+" text"
-                    +ROW_TASK_DESCRIPTION+" text" +");");
+            db.execSQL("create table " + TABLE_CONTACT + "("
+                    + ROW_CONTACT_ID + " integer primary key autoincrement, "
+                    + ROW_CONTACT_ID_PERSON + " integer, "
+                    + ROW_CONTACT_TYPE + " text, "
+                    + ROW_CONTACT_DESCRIPTION + " text" + ");");
 
-            db.execSQL("create table "+TABLE_ACTION+ "("
-                    +ROW_ACTION_ID+" integer primary key autoincrement, "
-                    +ROW_ACTION_NAME+" text, "
-                    +ROW_ACTION_DESCRIPTION+" text, "
-                    +ROW_ACTION_DATE+" text"
-                    +ROW_ACTION_TASK_ID+" integer"+");");
+            db.execSQL("create table " + TABLE_TASK + "("
+                    + ROW_TASK_ID + " integer primary key autoincrement, "
+                    + ROW_TASK_NAME + " text, "
+                    + ROW_TASK_DESCRIPTION + " text" + ");");
+
+            db.execSQL("create table " + TABLE_ACTION + "("
+                    + ROW_ACTION_ID + " integer primary key autoincrement, "
+                    + ROW_ACTION_NAME + " text, "
+                    + ROW_ACTION_DESCRIPTION + " text, "
+                    + ROW_ACTION_DATE + " text, "
+                    + ROW_ACTION_TASK_ID + " integer" + ");");
 
             //Todo Узнать про реализацию связи многие ко многим в SQLite
-/*
+
             db.execSQL("create table "+TABLE_PERSON_IN_ACTION+ "("
-                    +ROW_PERSON_IN_ACTION_ID_PERSION+" integer primary key, "
-                    +ROW_PERSON_IN_ACTION_ID_ACTION+" integer primary key" +");");
+                    +ROW_PERSON_IN_ACTION_ID_PERSION+" integer , "
+                    +ROW_PERSON_IN_ACTION_ID_ACTION+" integer " +");");
 
             db.execSQL("create table "+TABLE_PERSON_IN_GROUP+ "("
-                    +ROW_PERSON_IN_GROUP_ID_PERSON+" integer primary key, "
-                    +ROW_PERSON_IN_GROUP_ID_GROUP+" integer primary key" +");");
-*/
+                    +ROW_PERSON_IN_GROUP_ID_PERSON+" integer, "
+                    +ROW_PERSON_IN_GROUP_ID_GROUP+" integer" +");");
+
+            db.execSQL("create table "+TABLE_GROUP+ "("
+                    +ROW_GROUP_ID+" integer primary key autoincrement, "
+                    +ROW_GROUP_DESCRIPTION + " text, "
+                    +ROW_GROUP_NAMEGROUP+" text" +");");
 
         }
 

@@ -1,4 +1,4 @@
-package com.w3prog.personalmanager.Fragment;
+package com.w3prog.personalmanager.Fragment.Dialogs;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -45,24 +45,24 @@ public class DatePickerFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        date = (Date)getArguments().getSerializable(EXTRA_DATE);
+        date = (Date) getArguments().getSerializable(EXTRA_DATE);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-        final int hour =calendar.get(Calendar.HOUR);
-        final int minute =calendar.get(Calendar.MINUTE);
-        final int second =calendar.get(Calendar.SECOND);
+        final int hour = calendar.get(Calendar.HOUR);
+        final int minute = calendar.get(Calendar.MINUTE);
+        final int second = calendar.get(Calendar.SECOND);
 
         View v = getActivity().getLayoutInflater()
                 .inflate(R.layout.dialog_date, null);
 
-        DatePicker datePicker = (DatePicker)v.findViewById(R.id.dialog_date_datePicker);
+        DatePicker datePicker = (DatePicker) v.findViewById(R.id.dialog_date_datePicker);
         datePicker.init(year, month, day, new DatePicker.OnDateChangedListener() {
             public void onDateChanged(DatePicker view, int year, int month, int day) {
-                date = new GregorianCalendar(year, month, day,hour,minute,second).getTime();
+                date = new GregorianCalendar(year, month, day, hour, minute, second).getTime();
                 getArguments().putSerializable(EXTRA_DATE, date);
             }
         });

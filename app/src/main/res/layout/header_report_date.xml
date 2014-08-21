@@ -3,46 +3,51 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
     <TextView
         style="?android:listSeparatorTextViewStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/TaskEditTitle"/>
-
-    <EditText
-        android:id="@+id/TaskName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#888888"
-        android:text="@string/input_name_task"/>
-
-    <TextView
-        style="?android:listSeparatorTextViewStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/DescriptionTask"/>
-
-    <EditText
-        android:id="@+id/TaskDescription"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#888888"
-        android:inputType="textMultiLine"
-        android:lines="5"
-        android:text="@string/Input_description_task"/>
-
-    <TextView
-        style="?android:listSeparatorTextViewStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/ListActionInTask"/>
-
-    <ListView
-        android:id="@+id/listViewAction"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:text="От какой даты"
+        android:layout_gravity="center"
+        android:paddingLeft="60pt"
         />
+
+    <Button
+        android:id="@+id/ReportStartDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Выберите дату начала отчета"/>
+
+    <TextView
+        style="?android:listSeparatorTextViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="До какой даты"
+        android:layout_gravity="center"
+        android:paddingLeft="60pt"
+        />
+
+    <Button
+        android:id="@+id/ReportFinishDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Выберите дату конца отчета"/>
+
+    <TextView
+        style="?android:listSeparatorTextViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Участник"
+        android:layout_gravity="center"
+        android:paddingLeft="60pt"
+        />
+
+    <Button
+        android:id="@+id/SelectReportDatePerson"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Выберите человека"/>
 
 </LinearLayout>

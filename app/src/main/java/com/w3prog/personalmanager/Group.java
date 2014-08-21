@@ -2,20 +2,19 @@ package com.w3prog.personalmanager;
 
 import java.util.ArrayList;
 
-public class Task {
-
+public class Group {
     private long id;
     private String name;
     private String description;
-    private ArrayList<Action> Actions;
+    private ArrayList<Person> personsInGroup;
 
-    public Task(long id, String name, String description) {
-        this.id = id;
+    public Group(String name, String description) {
         this.name = name;
         this.description = description;
     }
 
-    public Task(String name, String description) {
+    public Group(long id, String name, String description) {
+        this.id = id;
         this.name = name;
         this.description = description;
     }
@@ -40,20 +39,19 @@ public class Task {
         this.description = description;
     }
 
-    public void addAction(Action action){
-        Actions.add(action);
+    public ArrayList<Person> getPersonsInGroup() {
+        return personsInGroup;
     }
 
-    public void removeAction(Action action){
-        Actions.remove(action);
+    public void AddPerson(Person p){
+        personsInGroup.add(p);
     }
 
-    public void removeAction(int i){
-        Actions.remove(i);
+    public void updatePerson(int i ,Person p){
+        personsInGroup.set(i,p);
     }
-
-    public void updateAction(int i, Action action){
-        Actions.set(i,action);
+    public void removePerson(Person p){
+        personsInGroup.remove(p);
     }
 
     @Override

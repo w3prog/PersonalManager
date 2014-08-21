@@ -5,6 +5,7 @@
     <string name="Contacts">Контаты</string>
     <string name="Actions">Мероприятия</string>
     <string name="Tasks">Задачи</string>
+    <string name="Report">Отчет</string>
     <string name="Add">Добавить элемент</string>
     <string name="ActionEditTitle">Название мероприятия</string>
     <string name="DateAction">Дата мероприятия</string>
@@ -21,5 +22,14 @@
     <string name="input_name_task">Введите название задачи</string>
     <string name="DescriptionTask">Описание задачи</string>
     <string name="Input_description_task">Введите описание задачи</string>
+    <string name="SelectTask">Укажите задачу</string>
+    <string name="AddTask">Добавить задачу</string>
+    <string name="AddPerson">Добавить личность</string>
+    <string name="AddAction">Добавить мероприятие</string>
+    <string name="ListActionInTask">Список мероприятий в задаче</string>
+    <string name="AddPersonInAction">Добавить человека</string>
+
+    <string name="GroupEditTitle">Название группы</string>
+    <string name="GroupEditDescription">Описание группы</string>
 
 </resources>

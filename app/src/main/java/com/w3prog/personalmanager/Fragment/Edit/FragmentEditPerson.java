@@ -1,4 +1,4 @@
-package com.w3prog.personalmanager.Fragment;
+package com.w3prog.personalmanager.Fragment.Edit;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -49,7 +49,7 @@ public class FragmentEditPerson extends Fragment {
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
         long personID = getArguments().getLong(EXTRA_PERSON_ID);
         person = DataBase.Get(getActivity()).getPerson(personID);
-        Log.d(TAG," FragmentEditPerson  onCreate");
+        Log.d(TAG, " FragmentEditPerson  onCreate");
 
         setHasOptionsMenu(true);
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -57,26 +57,28 @@ public class FragmentEditPerson extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.edit_person,container,false);
-        Log.d(TAG," FragmentEditPerson  onCreateView");
-        textViewFirstName = (TextView)v.findViewById(R.id.person_edit_firstname);
+        View v = inflater.inflate(R.layout.edit_person, container, false);
+        Log.d(TAG, " FragmentEditPerson  onCreateView");
+        textViewFirstName = (TextView) v.findViewById(R.id.person_edit_firstname);
         textViewFirstName.setText(person.getFirstName());
         textViewFirstName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 person.setFirstName(s.toString());
             }
+
             @Override
             public void afterTextChanged(Editable s) {
 
             }
         });
-        Log.d(TAG,person.getFirstName());
-        textViewLastName = (TextView)v.findViewById(R.id.person_edit_lastname);
+        Log.d(TAG, person.getFirstName());
+        textViewLastName = (TextView) v.findViewById(R.id.person_edit_lastname);
         textViewLastName.setText(person.getLastName());
         textViewLastName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -94,8 +96,8 @@ public class FragmentEditPerson extends Fragment {
 
             }
         });
-        Log.d(TAG,person.getLastName());
-        textViewPost = (TextView)v.findViewById(R.id.person_edit_post);
+        Log.d(TAG, person.getLastName());
+        textViewPost = (TextView) v.findViewById(R.id.person_edit_post);
         textViewPost.setText(person.getPost());
         textViewPost.addTextChangedListener(new TextWatcher() {
             @Override
@@ -115,15 +117,15 @@ public class FragmentEditPerson extends Fragment {
         });
 
 
-        // todo обновление списков.
+        //Обновление списков.
         ArrayList<Contact> ConcactCollection = DataBase.
                 Get(getActivity())
                 .getPhoneContactPerson(person);
         ArrayList<Contact> workConcactCollection = new ArrayList<Contact>();
 
         for (Contact contact : ConcactCollection) {
-            Log.e( TAG, contact.getType());
-            if (contact.getType() == "Phone"){
+            Log.e(TAG, contact.getType());
+            if (contact.getType() == "Phone") {
                 workConcactCollection.add(contact);
             } else {
                 workConcactCollection.add(contact);
@@ -132,19 +134,19 @@ public class FragmentEditPerson extends Fragment {
         }
 
         for (Contact contact : workConcactCollection) {
-            Log.e( TAG, " С внутреннего цикла " + contact.getType());
+            Log.e(TAG, " С внутреннего цикла " + contact.getType());
         }
 
 
-        listViewPhoneNumber = (ListView)v.findViewById(R.id.NumberPhoneListView);
+        listViewPhoneNumber = (ListView) v.findViewById(R.id.NumberPhoneListView);
         ContactApapter contactsAd = new ContactApapter(ConcactCollection);
 
         listViewPhoneNumber.setAdapter(contactsAd);
 
         workConcactCollection = new ArrayList<Contact>();
         for (Contact contact : ConcactCollection) {
-            Log.e( TAG, contact.getType());
-            if (contact.getType() == "Email"){
+            Log.e(TAG, contact.getType());
+            if (contact.getType() == "Email") {
                 workConcactCollection.add(contact);
             } else {
                 workConcactCollection.add(contact);
@@ -153,13 +155,13 @@ public class FragmentEditPerson extends Fragment {
         }
 
 
-        listViewEmail = (ListView)v.findViewById(R.id.EmailListView);
+        listViewEmail = (ListView) v.findViewById(R.id.EmailListView);
         ContactApapter contactsEmail = new ContactApapter(workConcactCollection);
         listViewEmail.setAdapter(contactsEmail);
 
         for (Contact contact : ConcactCollection) {
-            Log.e( TAG, contact.getType());
-            if (contact.getType() == "Website"){
+            Log.e(TAG, contact.getType());
+            if (contact.getType() == "Website") {
                 workConcactCollection.add(contact);
             } else {
                 workConcactCollection.add(contact);
@@ -167,12 +169,12 @@ public class FragmentEditPerson extends Fragment {
 
         }
 
-        listViewWebSite = (ListView)v.findViewById(R.id.WebSiteListView);
+        listViewWebSite = (ListView) v.findViewById(R.id.WebSiteListView);
         ContactApapter contactsWebSite = new ContactApapter(workConcactCollection);
         listViewWebSite.setAdapter(contactsWebSite);
 
         //добавление обработчиков кнопок добавления
-        buttonAddPhoneNumber = (Button)v.findViewById(R.id.NumberPhoneAddButton);
+        buttonAddPhoneNumber = (Button) v.findViewById(R.id.NumberPhoneAddButton);
         buttonAddPhoneNumber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -180,7 +182,7 @@ public class FragmentEditPerson extends Fragment {
             }
         });
 
-        Log.d(TAG," FragmentEditPerson end onCreateView");
+        Log.d(TAG, " FragmentEditPerson end onCreateView");
         return v;
     }
 
@@ -189,7 +191,7 @@ public class FragmentEditPerson extends Fragment {
         switch (item.getItemId()) {
             case android.R.id.home:
                 //todo в перспективе это может приветсти к багу на планшетах
-                Log.e(TAG,"Активити закрыла сама себя");
+                Log.e(TAG, "Активити закрыла сама себя");
                 getActivity().finish();
                 return true;
             default:
@@ -197,7 +199,7 @@ public class FragmentEditPerson extends Fragment {
         }
     }
 
-    public static FragmentEditPerson newInstance(long id){
+    public static FragmentEditPerson newInstance(long id) {
         Bundle args = new Bundle();
         args.putLong(EXTRA_PERSON_ID, id);
         FragmentEditPerson fragment = new FragmentEditPerson();
@@ -208,24 +210,24 @@ public class FragmentEditPerson extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        DataBase.Get(getActivity()).updatePerson((int)person.getId(),person);
+        DataBase.Get(getActivity()).updatePerson((int) person.getId(), person);
     }
 
     class ContactApapter extends ArrayAdapter<Contact> {
 
         public ContactApapter(ArrayList<Contact> contacts) {
-            super(getActivity(), 0,contacts);
+            super(getActivity(), 0, contacts);
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            if(convertView == null){
+            if (convertView == null) {
                 convertView = getActivity().getLayoutInflater()
-                        .inflate(R.layout.item_contact,null);
+                        .inflate(R.layout.item_contact, null);
             }
             final Contact contact = getItem(position);
 
-            EditText editTextDescription = (EditText)convertView
+            EditText editTextDescription = (EditText) convertView
                     .findViewById(R.id.DescriptionContact);
             editTextDescription.setText(contact.getDescription());
             editTextDescription.addTextChangedListener(new TextWatcher() {
@@ -238,7 +240,7 @@ public class FragmentEditPerson extends Fragment {
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     contact.setDescription(s.toString());
                     DataBase.Get(getActivity())
-                            .updateContact((int)contact.getIdContact(),contact);
+                            .updateContact((int) contact.getIdContact(), contact);
                 }
 
                 @Override
@@ -247,14 +249,13 @@ public class FragmentEditPerson extends Fragment {
                 }
             });
 
-            ImageButton buttonDelete = (ImageButton)convertView
+            ImageButton buttonDelete = (ImageButton) convertView
                     .findViewById(R.id.DeleteContactButton);
-            buttonDelete.setOnClickListener( new View.OnClickListener() {
+            buttonDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //todo должен удалить но хз как это сделать.
                     remove(contact);
-                    DataBase.Get(getActivity()).deleteContact((int)contact.getIdContact());
+                    DataBase.Get(getActivity()).deleteContact((int) contact.getIdContact());
                 }
             });
 

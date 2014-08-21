@@ -1,19 +1,23 @@
-package com.w3prog.personalmanager.Fragment;
+package com.w3prog.personalmanager.Fragment.List;
 
 import android.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.w3prog.personalmanager.Action;
 import com.w3prog.personalmanager.Activity.ActivityEditAction;
 import com.w3prog.personalmanager.DataBase;
+import com.w3prog.personalmanager.Fragment.Edit.FragmentEditAction;
 import com.w3prog.personalmanager.R;
 
 import java.util.ArrayList;
@@ -34,9 +38,9 @@ public class FragmentListAction extends ListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        Action action = ((ActionAdapter)getListAdapter()).getItem(position);
-        Intent i = new Intent(getActivity(),ActivityEditAction.class);
-        i.putExtra(FragmentEditAction.EXTRA_ACTION_ID,action.getId());
+        Action action = ((ActionAdapter) getListAdapter()).getItem(position);
+        Intent i = new Intent(getActivity(), ActivityEditAction.class);
+        i.putExtra(FragmentEditAction.EXTRA_ACTION_ID, action.getId());
         startActivity(i);
     }
 
@@ -59,44 +63,39 @@ public class FragmentListAction extends ListFragment {
         inflater.inflate(R.menu.menu_fragment_action, menu);
     }
 
-/*
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.item_new_groupCrime:
-                Event event = new Event();
-                Intent intent = getIntent();
-                int idGroup = intent.getIntExtra(EXTRA_Id,1);
-
-                Log.d(TAG, "В приложение уже вошли!");
-                EventCollection.get(this).addEvent(event);
-                Intent i = new Intent(this, EditEventActivity.class);
-                i.putExtra(EditEventActivity.EXTRA_ID, event.getId());
-                i.putExtra(EditEventActivity.EXTRA_GROUP_ID, idGroup);
-                i.putExtra(EditEventActivity.EXTRA_TYPE,true);
-                Log.d(TAG,"В приложение уже вошли!");
+    public void onActivityCreated(Bundle savedInstanceState) {
+        final LayoutInflater inflater = getActivity().getLayoutInflater();
+        View view = (LinearLayout) inflater.inflate(R.layout.footer_list_action, null);
+        Button buttonFooter = (Button) view.findViewById(R.id.FooterListAction);
+        buttonFooter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                long l = DataBase.Get(getActivity()).insertNewAction();
+                Intent i = new Intent(getActivity(), ActivityEditAction.class);
+                i.putExtra(FragmentEditAction.EXTRA_ACTION_ID, l);
                 startActivity(i);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }*/
+            }
+        });
+        getListView().addFooterView(view);
+        super.onActivityCreated(savedInstanceState);
+    }
 
-    private class ActionAdapter extends ArrayAdapter<Action>{
+    private class ActionAdapter extends ArrayAdapter<Action> {
 
         public ActionAdapter(ArrayList<Action> actions) {
-            super(getActivity(), 0,actions);
+            super(getActivity(), 0, actions);
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            if(convertView == null){
+            if (convertView == null) {
                 convertView = getActivity().getLayoutInflater()
-                        .inflate(android.R.layout.simple_list_item_1,null);
+                        .inflate(android.R.layout.simple_list_item_1, null);
             }
             Action action = getItem(position);
 
-            TextView textViewName = (TextView)convertView.findViewById(android.R.id.text1);
+            TextView textViewName = (TextView) convertView.findViewById(android.R.id.text1);
             textViewName.setText(action.getName());
             return convertView;
         }

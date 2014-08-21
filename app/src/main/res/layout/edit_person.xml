@@ -17,17 +17,41 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+                <TextView
+                    style="?android:listSeparatorTextViewStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Имя"
+                    android:layout_gravity="center"
+                    android:paddingLeft="60pt"      />
+
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Имя"
                     android:id="@+id/person_edit_firstname" />
 
+                <TextView
+                    style="?android:listSeparatorTextViewStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Фамилия"
+                    android:layout_gravity="center"
+                    android:paddingLeft="60pt"      />
+
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Фамилия"
                     android:id="@+id/person_edit_lastname" />
+
+                <TextView
+                    style="?android:listSeparatorTextViewStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Кем приходиться"
+                    android:layout_gravity="center"
+                    android:paddingLeft="60pt"      />
 
                 <EditText
                     android:layout_width="match_parent"
