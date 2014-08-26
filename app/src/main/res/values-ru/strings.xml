@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">PersonalManager</string>
+    <string name="app_name">Мой проект</string>
     <string name="Contacts">Контаты</string>
     <string name="Actions">Мероприятия</string>
     <string name="Tasks">Задачи</string>
@@ -32,12 +32,5 @@
 
     <string name="GroupEditTitle">Название группы</string>
     <string name="GroupEditDescription">Описание группы</string>
-
-    <string name="title_section1">Участники</string>
-    <string name="title_section2">Группы</string>
-    <string name="title_section3">Меропрития</string>
-    <string name="title_section4">Задачи</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
 
 </resources>

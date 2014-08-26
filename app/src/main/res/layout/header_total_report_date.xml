@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="От какой даты"
+        android:layout_gravity="center"
         android:gravity="center"
         />
 
@@ -24,6 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="До какой даты"
+        android:layout_gravity="center"
         android:gravity="center"
         />
 
@@ -33,18 +35,5 @@
         android:layout_height="wrap_content"
         android:text="Выберите дату конца отчета"/>
 
-    <TextView
-        style="?android:listSeparatorTextViewStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Участник"
-        android:gravity="center"
-        />
-
-    <Button
-        android:id="@+id/SelectReportDatePerson"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Выберите человека"/>
 
 </LinearLayout>

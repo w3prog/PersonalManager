@@ -40,20 +40,20 @@ public class Task {
         this.description = description;
     }
 
-    public void addAction(Action action){
+    public void addAction(Action action) {
         Actions.add(action);
     }
 
-    public void removeAction(Action action){
+    public void removeAction(Action action) {
         Actions.remove(action);
     }
 
-    public void removeAction(int i){
+    public void removeAction(int i) {
         Actions.remove(i);
     }
 
-    public void updateAction(int i, Action action){
-        Actions.set(i,action);
+    public void updateAction(int i, Action action) {
+        Actions.set(i, action);
     }
 
     @Override

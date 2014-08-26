@@ -13,7 +13,7 @@ public class FragmentReadPerson extends Fragment {
     private Person person;
     private static final String TAG = "FragmentEditPerson";
 
-    public static final String EXTRA_PERSON_ID = "com.w3prog.personalmanager." +
+    public static final String EXTRA_PERSON_ID = "com.w3Prog.personalManager." +
             "Fragment.FragmentEditPerson.EXTRA_PERSON_ID";
 
     @Override

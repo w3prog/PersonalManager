@@ -39,7 +39,7 @@ public class FragmentListGroup extends ListFragment {
     }
 
     private void setData() {
-        groupArrayList = DataBase.Get(getActivity()).getGroups();
+        groupArrayList = DataBase.get(getActivity()).getGroups();
         setHasOptionsMenu(true);
         groupAdapter = new GroupAdapter(groupArrayList);
         setListAdapter(groupAdapter);
@@ -54,12 +54,10 @@ public class FragmentListGroup extends ListFragment {
         startActivity(i);
     }
 
-
     @Override
     public void onResume() {
         super.onResume();
-        groupArrayList = DataBase.Get(getActivity()).getGroups();
-        //todo Спросить можно ли это сделать попроще
+        groupArrayList = DataBase.get(getActivity()).getGroups();
         GroupAdapter groupAdapter = new GroupAdapter(groupArrayList);
         setListAdapter(groupAdapter);
     }

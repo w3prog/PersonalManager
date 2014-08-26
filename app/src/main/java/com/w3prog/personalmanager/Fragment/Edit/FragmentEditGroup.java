@@ -9,8 +9,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.EditText;
 
 import com.w3prog.personalmanager.DataBase;
 import com.w3prog.personalmanager.Group;
@@ -18,8 +17,6 @@ import com.w3prog.personalmanager.R;
 
 public class FragmentEditGroup extends Fragment {
     public static final String EXTRA_GROUP_ID = "FragmentEditGroup.EXTRA_GROUP_ID";
-    private TextView textViewName;
-    private TextView textViewDescriproin;
     private Group group;
     private static final String TAG = "FragmentEditGroup";
 
@@ -30,16 +27,16 @@ public class FragmentEditGroup extends Fragment {
         Log.e(TAG, Long.toString(groupID));
         setHasOptionsMenu(true);
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
-        group = DataBase.Get(getActivity()).getGroup(groupID);
+        group = DataBase.get(getActivity()).getGroup(groupID);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.edit_group,container,false);
+        View view = inflater.inflate(R.layout.edit_group, container, false);
 
-        textViewName = (Button)view.findViewById(R.id.GroupEditTitle);
-        textViewName.setText(group.getName());
-        textViewName.addTextChangedListener(new TextWatcher() {
+        EditText editTextName = (EditText) view.findViewById(R.id.GroupEditTitle);
+        editTextName.setText(group.getName());
+        editTextName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -56,9 +53,9 @@ public class FragmentEditGroup extends Fragment {
             }
         });
 
-        textViewDescriproin = (Button)view.findViewById(R.id.GroupEditDescription);
-        textViewDescriproin.setText(group.getDescription());
-        textViewDescriproin.addTextChangedListener(new TextWatcher() {
+        EditText editTextDescription = (EditText) view.findViewById(R.id.GroupEditDescription);
+        editTextDescription.setText(group.getDescription());
+        editTextDescription.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -92,7 +89,7 @@ public class FragmentEditGroup extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        DataBase.Get(getActivity()).updateGroup(group.getId(), group);
+        DataBase.get(getActivity()).updateGroup(group.getId(), group);
     }
 
     public static Fragment newInstance(long l) {

@@ -43,14 +43,15 @@ public class Group {
         return personsInGroup;
     }
 
-    public void AddPerson(Person p){
+    public void AddPerson(Person p) {
         personsInGroup.add(p);
     }
 
-    public void updatePerson(int i ,Person p){
-        personsInGroup.set(i,p);
+    public void updatePerson(int i, Person p) {
+        personsInGroup.set(i, p);
     }
-    public void removePerson(Person p){
+
+    public void removePerson(Person p) {
         personsInGroup.remove(p);
     }
 

@@ -28,14 +28,14 @@ public class DialogSelectTask extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         final ArrayList<Task> tasks = new ArrayList<Task>(
-                DataBase.Get(getActivity()).getTasks());
+                DataBase.get(getActivity()).getTasks());
         if (tasks.size() == 0) {
             //todo решить проблему нулевых задач
         }
 
-        final int tasksize = tasks.size();
-        CharSequence[] s = new CharSequence[tasksize];
-        for (int i = 0; i < tasksize; i++) {
+        final int taskSize = tasks.size();
+        CharSequence[] s = new CharSequence[taskSize];
+        for (int i = 0; i < taskSize; i++) {
             s[i] = tasks.get(i).getName();
         }
 

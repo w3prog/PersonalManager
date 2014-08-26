@@ -28,7 +28,7 @@ public class DialogSelectPerson extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         final ArrayList<Person> persons = new ArrayList<Person>(
-                DataBase.Get(getActivity()).getPersons());
+                DataBase.get(getActivity()).getPersons());
         if (persons.size() == 0) {
             //todo решить проблему нулевых выборов.
         }

@@ -1,11 +1,12 @@
 package com.w3prog.personalmanager.Fragment.Edit;
 
-import android.app.Fragment;
+import android.app.Activity;
+import android.app.ListFragment;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +14,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListView;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.w3prog.personalmanager.Contact;
 import com.w3prog.personalmanager.DataBase;
@@ -23,43 +25,49 @@ import com.w3prog.personalmanager.R;
 
 import java.util.ArrayList;
 
-public class FragmentEditPerson extends Fragment {
+public class FragmentEditPerson extends ListFragment {
 
     private Person person;
     private TextView textViewPost;
     private TextView textViewFirstName;
     private TextView textViewLastName;
-    private ListView listViewPhoneNumber;
-    private ListView listViewEmail;
-    private ListView listViewWebSite;
-
     private Button buttonAddPhoneNumber;
-    private Button buttonAddEmail;
-    private Button buttonAddWebsite;
+    private ImageView imageViewLogo;
+    static final int GALLERY_REQUEST = 1;
+    View viewHeader;
+    View viewFooter;
 
+    ContactAdapter contactsAd;
     private static final String TAG = "FragmentEditPerson";
 
-    public static final String EXTRA_PERSON_ID = "com.w3prog.personalmanager." +
+    public static final String EXTRA_PERSON_ID = "com.w3Prog.personalManager." +
             "Fragment.FragmentEditPerson.EXTRA_PERSON_ID";
 
-
+    ArrayList<Contact> ContactCollection;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
-        long personID = getArguments().getLong(EXTRA_PERSON_ID);
-        person = DataBase.Get(getActivity()).getPerson(personID);
-        Log.d(TAG, " FragmentEditPerson  onCreate");
-
         setHasOptionsMenu(true);
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        ContactCollection = DataBase.
+                get(getActivity())
+                .getPhoneContactPerson(person);
+
+        contactsAd = new ContactAdapter(ContactCollection);
+        setListAdapter(contactsAd);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.edit_person, container, false);
-        Log.d(TAG, " FragmentEditPerson  onCreateView");
-        textViewFirstName = (TextView) v.findViewById(R.id.person_edit_firstname);
+    public void onAttach(Activity activity) {
+        long personID = getArguments().getLong(EXTRA_PERSON_ID);
+        person = DataBase.get(getActivity()).getPerson(personID);
+
+        viewHeader = getActivity().getLayoutInflater().
+                inflate(R.layout.header_edit_person, null);
+
+        textViewFirstName = (TextView) viewHeader.findViewById(R.id.person_edit_firstname);
         textViewFirstName.setText(person.getFirstName());
         textViewFirstName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -77,8 +85,8 @@ public class FragmentEditPerson extends Fragment {
 
             }
         });
-        Log.d(TAG, person.getFirstName());
-        textViewLastName = (TextView) v.findViewById(R.id.person_edit_lastname);
+
+        textViewLastName = (TextView) viewHeader.findViewById(R.id.person_edit_lastname);
         textViewLastName.setText(person.getLastName());
         textViewLastName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -96,8 +104,8 @@ public class FragmentEditPerson extends Fragment {
 
             }
         });
-        Log.d(TAG, person.getLastName());
-        textViewPost = (TextView) v.findViewById(R.id.person_edit_post);
+
+        textViewPost = (TextView) viewHeader.findViewById(R.id.person_edit_post);
         textViewPost.setText(person.getPost());
         textViewPost.addTextChangedListener(new TextWatcher() {
             @Override
@@ -116,82 +124,54 @@ public class FragmentEditPerson extends Fragment {
             }
         });
 
-
-        //Обновление списков.
-        ArrayList<Contact> ConcactCollection = DataBase.
-                Get(getActivity())
-                .getPhoneContactPerson(person);
-        ArrayList<Contact> workConcactCollection = new ArrayList<Contact>();
-
-        for (Contact contact : ConcactCollection) {
-            Log.e(TAG, contact.getType());
-            if (contact.getType() == "Phone") {
-                workConcactCollection.add(contact);
-            } else {
-                workConcactCollection.add(contact);
-            }
-
+        imageViewLogo = (ImageView) viewHeader.findViewById(R.id.logoPerson);
+        if (person.getStrImg() != "" || person.getStrImg() != null){
+            imageViewLogo.setImageURI(Uri.parse(person.getStrImg()));
         }
 
-        for (Contact contact : workConcactCollection) {
-            Log.e(TAG, " С внутреннего цикла " + contact.getType());
-        }
-
-
-        listViewPhoneNumber = (ListView) v.findViewById(R.id.NumberPhoneListView);
-        ContactApapter contactsAd = new ContactApapter(ConcactCollection);
-
-        listViewPhoneNumber.setAdapter(contactsAd);
-
-        workConcactCollection = new ArrayList<Contact>();
-        for (Contact contact : ConcactCollection) {
-            Log.e(TAG, contact.getType());
-            if (contact.getType() == "Email") {
-                workConcactCollection.add(contact);
-            } else {
-                workConcactCollection.add(contact);
-            }
-
-        }
-
-
-        listViewEmail = (ListView) v.findViewById(R.id.EmailListView);
-        ContactApapter contactsEmail = new ContactApapter(workConcactCollection);
-        listViewEmail.setAdapter(contactsEmail);
-
-        for (Contact contact : ConcactCollection) {
-            Log.e(TAG, contact.getType());
-            if (contact.getType() == "Website") {
-                workConcactCollection.add(contact);
-            } else {
-                workConcactCollection.add(contact);
-            }
-
-        }
-
-        listViewWebSite = (ListView) v.findViewById(R.id.WebSiteListView);
-        ContactApapter contactsWebSite = new ContactApapter(workConcactCollection);
-        listViewWebSite.setAdapter(contactsWebSite);
-
-        //добавление обработчиков кнопок добавления
-        buttonAddPhoneNumber = (Button) v.findViewById(R.id.NumberPhoneAddButton);
-        buttonAddPhoneNumber.setOnClickListener(new View.OnClickListener() {
+        imageViewLogo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //to добавляет новый контакт в список и базу данных
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                startActivityForResult(photoPickerIntent, GALLERY_REQUEST);
             }
         });
 
-        Log.d(TAG, " FragmentEditPerson end onCreateView");
-        return v;
+        viewFooter = getActivity().getLayoutInflater()
+                .inflate(R.layout.footer_edit_person,null);
+
+        buttonAddPhoneNumber = (Button) viewFooter.findViewById(R.id.NumberPhoneAddButton);
+        buttonAddPhoneNumber.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DataBase.get(getActivity()).insertNewConcact(person);
+                updateListView();
+            }
+        });
+
+        super.onAttach(activity);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        getListView().addHeaderView(viewHeader);
+        getListView().addFooterView(viewFooter);
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    private void updateListView(){
+        contactsAd.clear();
+        contactsAd.addAll(DataBase.
+                get(getActivity())
+                .getPhoneContactPerson(person));
+        getListView().setAdapter(contactsAd);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                //todo в перспективе это может приветсти к багу на планшетах
-                Log.e(TAG, "Активити закрыла сама себя");
                 getActivity().finish();
                 return true;
             default:
@@ -210,12 +190,26 @@ public class FragmentEditPerson extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        DataBase.Get(getActivity()).updatePerson((int) person.getId(), person);
+        DataBase.get(getActivity()).updatePerson((int) person.getId(), person);
     }
 
-    class ContactApapter extends ArrayAdapter<Contact> {
 
-        public ContactApapter(ArrayList<Contact> contacts) {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch(requestCode) {
+            case GALLERY_REQUEST:
+                if(resultCode == Activity.RESULT_OK){
+                    Uri selectedImage = data.getData();
+                    imageViewLogo.setImageURI(selectedImage);
+                    person.setStrImg(data.getData().toString());
+                }
+        }
+    }
+
+
+    class ContactAdapter extends ArrayAdapter<Contact> {
+
+        public ContactAdapter(ArrayList<Contact> contacts) {
             super(getActivity(), 0, contacts);
         }
 
@@ -239,7 +233,7 @@ public class FragmentEditPerson extends Fragment {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     contact.setDescription(s.toString());
-                    DataBase.Get(getActivity())
+                    DataBase.get(getActivity())
                             .updateContact((int) contact.getIdContact(), contact);
                 }
 
@@ -249,15 +243,33 @@ public class FragmentEditPerson extends Fragment {
                 }
             });
 
+            ImageButton buttonCall = (ImageButton) convertView
+                    .findViewById(R.id.imgCall);
+            buttonCall.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    intent.setData(Uri.parse("tel:" + contact.getDescription()));
+                    startActivity(intent);
+                    } catch (Exception e){
+                        Toast.makeText(getContext(),
+                                "Проверьте правильность введенного номера",
+                                Toast.LENGTH_SHORT);
+                    }
+                }
+            });
             ImageButton buttonDelete = (ImageButton) convertView
                     .findViewById(R.id.DeleteContactButton);
             buttonDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     remove(contact);
-                    DataBase.Get(getActivity()).deleteContact((int) contact.getIdContact());
+                    DataBase.get(getActivity()).deleteContact((int) contact.getIdContact());
                 }
             });
+
+
 
             return convertView;
         }

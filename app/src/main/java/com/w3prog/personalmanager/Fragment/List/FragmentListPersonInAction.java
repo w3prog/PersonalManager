@@ -5,6 +5,9 @@ import android.app.FragmentManager;
 import android.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,7 +18,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -24,6 +27,7 @@ import com.w3prog.personalmanager.DataBase;
 import com.w3prog.personalmanager.Fragment.Dialogs.DialogSelectAction;
 import com.w3prog.personalmanager.Fragment.Dialogs.DialogSelectPerson;
 import com.w3prog.personalmanager.Person;
+import com.w3prog.personalmanager.PersonUtil;
 import com.w3prog.personalmanager.R;
 
 import java.util.ArrayList;
@@ -35,11 +39,12 @@ public class FragmentListPersonInAction extends ListFragment {
     private static final int REQUEST_ACTION = 10;
     private static final String DIALOG_ACTION = "action";
     private static final String DIALOG_PERSON = "person";
-    private PersonAdapter personAdapter;
+    private PersonsResultAdapter personAdapter;
     private ArrayList<Person> personArrayList;
     private Action action = null;
     private Button buttonHeader;
     private Button buttonFooter;
+    //todo не показывает новые значения!!!
 
 
     @Override
@@ -50,7 +55,7 @@ public class FragmentListPersonInAction extends ListFragment {
 
     private void setData() {
         final LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = (LinearLayout) inflater
+        View view = inflater
                 .inflate(R.layout.header_person_in_action, null);
 
         buttonHeader = (Button) view.findViewById(R.id.addPersonInAction);
@@ -67,7 +72,7 @@ public class FragmentListPersonInAction extends ListFragment {
         ListView listView = getListView();
         listView.addHeaderView(view);
 
-        View view1 = (LinearLayout) inflater
+        View view1 = inflater
                 .inflate(R.layout.footer_person_in_action, null);
 
         buttonFooter = (Button) view1.findViewById(R.id.FooterPersonInAction);
@@ -83,14 +88,11 @@ public class FragmentListPersonInAction extends ListFragment {
         });
 
         listView.addFooterView(view1);
-
         setHasOptionsMenu(true);
-
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
             @Override
             public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-
             }
 
             @Override
@@ -112,20 +114,15 @@ public class FragmentListPersonInAction extends ListFragment {
                         //todo не всегда правильно удаляет
                         for (int i = personAdapter.getCount() - 1; i >= 0; i--) {
                             if (getListView().isItemChecked(i)) {
-                                DataBase.Get(getActivity())
+                                DataBase.get(getActivity())
                                         .deleteRowPersonInAction(
-                                                personAdapter.getItem(i).getId(),
+                                                personAdapter.getItem(i).getPerson().getId(),
                                                 action.getId());
                             }
                         }
-
                         mode.finish();
-                        personArrayList = DataBase
-                                .Get(getActivity())
-                                .getRowsPersonInAction(action);
-                        // помне это слишком большое нагромаждение.
-                        // todo узнать можно ли не создавать новый адаптер
-                        personAdapter = new PersonAdapter(personArrayList);
+                        action = DataBase.get(getActivity()).getRowsPersonInAction(action);
+                        personAdapter = new PersonsResultAdapter(action.getPersonsInAction());
                         setListAdapter(personAdapter);
                         return true;
                     default:
@@ -146,37 +143,42 @@ public class FragmentListPersonInAction extends ListFragment {
         if (resultCode != Activity.RESULT_OK) return;
         if (requestCode == REQUEST_ACTION) {
             long l = data.getLongExtra(DialogSelectAction.EXTRA_ACTION, 0);
-            action = DataBase.Get(getActivity()).getAction(l);
+            action = DataBase.get(getActivity()).getAction(l);
             buttonHeader.setText(action.getName());
             updateListPerson();
         }
         if (requestCode == REQUEST_PERSON) {
             long l = data.getLongExtra(DialogSelectPerson.EXTRA_PERSON, 0);
-            Person person = DataBase.Get(getActivity()).getPerson(l);
+            Person person = DataBase.get(getActivity()).getPerson(l);
             //todo решить проблему наличия в активити, выбранного человека, второй раз
-            DataBase.Get(getActivity()).insertRowPersonInAction(person.getId(), action.getId());
+            DataBase.get(getActivity()).insertRowPersonInAction(person.getId(), action.getId());
             if (personArrayList == null)
                 personArrayList = new ArrayList<Person>();
             personArrayList.add(person);
             if (personAdapter == null)
-                personAdapter = new PersonAdapter(personArrayList);
+                personAdapter = new PersonsResultAdapter(action.getPersonsInAction());
             updateListPerson();
         }
     }
 
     private void updateListPerson() {
-        personArrayList = DataBase.Get(getActivity()).getRowsPersonInAction(action);
-        if (personArrayList != null) {
-            personAdapter = new PersonAdapter(personArrayList);
+        action.getPersonsInAction().clear();
+        action = DataBase.get(getActivity()).getRowsPersonInAction(action);
+        if (action.getPersonsInAction() != null) {
+
+            personAdapter = new PersonsResultAdapter(action.getPersonsInAction());
+            for (Action.PersonsResult personsResult :action.getPersonsInAction()) {
+                Log.e(TAG, personsResult.toString());
+            }
             setListAdapter(personAdapter);
         } else {
             setListAdapter(null);
         }
     }
 
-    public class PersonAdapter extends ArrayAdapter<Person> {
+    public class PersonsResultAdapter extends ArrayAdapter<Action.PersonsResult> {
 
-        public PersonAdapter(ArrayList<Person> Persons) {
+        public PersonsResultAdapter(ArrayList<Action.PersonsResult> Persons) {
             super(getActivity(), 0, Persons);
         }
 
@@ -184,14 +186,41 @@ public class FragmentListPersonInAction extends ListFragment {
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
                 convertView = getActivity().getLayoutInflater()
-                        .inflate(R.layout.item_person, null);
+                        .inflate(R.layout.item_personals_result, null);
             }
-            Person c = getItem(position);
-            TextView textViewName = (TextView) convertView.findViewById(R.id.item_FullName);
-            textViewName.setText(c.getFirstName() + " " + c.getLastName());
-            TextView textViewPost = (TextView) convertView.findViewById(R.id.item_post);
-            textViewPost.setText(c.getPost());
+            final Action.PersonsResult c = getItem(position);
+            TextView textViewName = (TextView) convertView.findViewById(R.id.PersonFullName);
+            textViewName.setText(c.getPerson().toString());
+            EditText textViewResult = (EditText) convertView.findViewById(R.id.editTextPersonsResult);
+            textViewResult.setText(c.getRes().toString());
+            textViewResult.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    Long l = 0L;
+                    if (PersonUtil.checkString(s.toString()))
+                        Long.decode(s.toString());
+                    Log.e(TAG,l.toString());
+                    if (l != null)
+                        DataBase.get(getActivity())
+                                .updateRowPersonInAction(c.getPerson().getId(),
+                                        action.getId(),
+                                        l);
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
             return convertView;
         }
     }
+
+
 }

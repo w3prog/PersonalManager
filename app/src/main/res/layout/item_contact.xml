@@ -4,10 +4,17 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageButton
+        android:id="@+id/imgCall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/stat_sys_phone_call"/>
+
     <EditText
         android:layout_weight="3"
         android:gravity="center"
         android:paddingTop="5dp"
+        android:inputType="phone"
         android:id="@+id/DescriptionContact"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

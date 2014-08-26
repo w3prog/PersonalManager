@@ -31,7 +31,7 @@ public class FragmentEditAction extends Fragment {
     private Button buttonTime;
     private Button buttonTask;
     private TextView textViewName;
-    private TextView textViewDescriproin;
+    private TextView textViewDescription;
     private Action action;
     private static final String TAG = "FragmentEditAction";
 
@@ -51,7 +51,7 @@ public class FragmentEditAction extends Fragment {
         setHasOptionsMenu(true);
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        action = DataBase.Get(getActivity()).getAction(actionID);
+        action = DataBase.get(getActivity()).getAction(actionID);
     }
 
     @Override
@@ -123,9 +123,9 @@ public class FragmentEditAction extends Fragment {
             }
         });
 
-        textViewDescriproin = (TextView) v.findViewById(R.id.ActionDescription);
-        textViewDescriproin.setText(action.getDescription());
-        textViewDescriproin.addTextChangedListener(new TextWatcher() {
+        textViewDescription = (TextView) v.findViewById(R.id.ActionDescription);
+        textViewDescription.setText(action.getDescription());
+        textViewDescription.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -169,7 +169,7 @@ public class FragmentEditAction extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        DataBase.Get(getActivity()).updateAction((int) action.getId(), action);
+        DataBase.get(getActivity()).updateAction((int) action.getId(), action);
     }
 
     @Override
@@ -187,11 +187,11 @@ public class FragmentEditAction extends Fragment {
         }
         if (requestCode == REQUEST_TASK) {
             action.setTask(DataBase.
-                    Get(getActivity())
+                    get(getActivity())
                     .getTask(data
                             .getIntExtra(DialogSelectTask.EXTRA_TASK, 1)));
             buttonTask.setText(action.getTask().getName());
-            DataBase.Get(getActivity()).updateAction((int) action.getId(), action);
+            DataBase.get(getActivity()).updateAction((int) action.getId(), action);
         }
     }
 

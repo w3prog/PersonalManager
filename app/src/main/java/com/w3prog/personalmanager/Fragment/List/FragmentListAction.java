@@ -4,13 +4,10 @@ import android.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -29,12 +26,11 @@ public class FragmentListAction extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        actionsArrayList = DataBase.Get(getActivity()).getActions();
+        actionsArrayList = DataBase.get(getActivity()).getActions();
         setHasOptionsMenu(true);
         ActionAdapter actionAdapter = new ActionAdapter(actionsArrayList);
         setListAdapter(actionAdapter);
     }
-
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
@@ -46,32 +42,21 @@ public class FragmentListAction extends ListFragment {
 
     @Override
     public void onResume() {
-
         super.onResume();
-        actionsArrayList = DataBase.Get(getActivity()).getActions();
-
-        //todo Можно ли это сделать попроще
-
+        actionsArrayList = DataBase.get(getActivity()).getActions();
         ActionAdapter actionAdapter = new ActionAdapter(actionsArrayList);
         setListAdapter(actionAdapter);
-    }
-
-    //todo пока бессмысленно нужно будет определить как лучше сохранять и добавлять данные
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_fragment_action, menu);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         final LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = (LinearLayout) inflater.inflate(R.layout.footer_list_action, null);
+        View view = inflater.inflate(R.layout.footer_list_action, null);
         Button buttonFooter = (Button) view.findViewById(R.id.FooterListAction);
         buttonFooter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                long l = DataBase.Get(getActivity()).insertNewAction();
+                long l = DataBase.get(getActivity()).insertNewAction();
                 Intent i = new Intent(getActivity(), ActivityEditAction.class);
                 i.putExtra(FragmentEditAction.EXTRA_ACTION_ID, l);
                 startActivity(i);

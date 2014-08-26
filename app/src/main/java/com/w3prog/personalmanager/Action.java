@@ -12,7 +12,8 @@ public class Action {
     private String description;
     private Task task;
 
-    private ArrayList<Person> PersonsInAction = new ArrayList<Person>();
+    private ArrayList<PersonsResult> PersonsInAction = new ArrayList<PersonsResult>();
+
 
     //Для получения из базы данных
     public Action(long id, String name, Date date, String description) {
@@ -21,6 +22,7 @@ public class Action {
         this.date = date;
         this.description = description;
     }
+
     //Для внесения в базу данных
     public Action(String name, Date date, String description) {
         this.name = name;
@@ -64,20 +66,52 @@ public class Action {
         this.task = task;
     }
 
-    public ArrayList<Person> getPersonsInAction() {
+    public ArrayList<PersonsResult> getPersonsInAction() {
         return PersonsInAction;
     }
     // добавить персону
-    public void addPerson(Person c){
-        PersonsInAction.add(c);
+
+    public void setPersons(ArrayList<PersonsResult> persons) {
+        this.PersonsInAction = persons;
+    }
+
+    public void addPerson(Person c, Long l) {
+        PersonsInAction.add(new PersonsResult(c, l));
     }
 
     //Удалить элемент в коллекцию персон
-    public void removePerson(Person c){
+    public void removePerson(Person c) {
         PersonsInAction.remove(c);
     }
+
     //заменить элемент в колекции персон
-    public void updatePerson(int id,Person c){
-        PersonsInAction.set(id,c);
+    public void updatePerson(int id, Person c, Long l) {
+        PersonsInAction.set(id, new PersonsResult(c, l));
+    }
+
+    public class PersonsResult {
+        Person person;
+        Long res;
+
+        private PersonsResult(Person person, Long res) {
+            this.person = person;
+            this.res = res;
+        }
+
+        public Person getPerson() {
+            return person;
+        }
+
+        public void setPerson(Person person) {
+            this.person = person;
+        }
+
+        public Long getRes() {
+            return res;
+        }
+
+        public void setRes(Long res) {
+            this.res = res;
+        }
     }
 }

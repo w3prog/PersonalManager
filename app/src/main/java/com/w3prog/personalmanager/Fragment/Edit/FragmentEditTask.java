@@ -22,9 +22,6 @@ import java.util.ArrayList;
 
 public class FragmentEditTask extends Fragment {
     public static final String EXTRA_TASK_ID = "FragmentEditTask.EXTRA_TASK_ID";
-    private TextView textViewName;
-    private TextView textViewDescriproin;
-    private ListView listViewAction;
     private Task task;
     private static final String TAG = "FragmentEditTask";
 
@@ -35,13 +32,13 @@ public class FragmentEditTask extends Fragment {
         Log.e(TAG, Long.toString(taskID));
         setHasOptionsMenu(true);
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
-        task = DataBase.Get(getActivity()).getTask(taskID);
+        task = DataBase.get(getActivity()).getTask(taskID);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.edit_task, container, false);
-        textViewName = (TextView) v.findViewById(R.id.TaskName);
+        TextView textViewName = (TextView) v.findViewById(R.id.TaskName);
 
         if (task.getName() != "" || task.getName() != null)
             textViewName.setText(task.getName());
@@ -64,9 +61,9 @@ public class FragmentEditTask extends Fragment {
         });
 
 
-        textViewDescriproin = (TextView) v.findViewById(R.id.TaskDescription);
-        textViewDescriproin.setText(task.getDescription());
-        textViewDescriproin.addTextChangedListener(new TextWatcher() {
+        TextView textViewDescription = (TextView) v.findViewById(R.id.TaskDescription);
+        textViewDescription.setText(task.getDescription());
+        textViewDescription.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -83,10 +80,10 @@ public class FragmentEditTask extends Fragment {
             }
         });
 
-        listViewAction = (ListView) v.findViewById(R.id.listViewAction);
+        ListView listViewAction = (ListView) v.findViewById(R.id.listViewAction);
 
         ActionAdapter adapter = new ActionAdapter(
-                DataBase.Get(getActivity()).getActionOfTask(task)
+                DataBase.get(getActivity()).getActionOfTask(task)
         );
         listViewAction.setAdapter(adapter);
 
@@ -118,7 +115,7 @@ public class FragmentEditTask extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        DataBase.Get(getActivity()).updateTask((int) task.getId(), task);
+        DataBase.get(getActivity()).updateTask((int) task.getId(), task);
     }
 
     private class ActionAdapter extends ArrayAdapter<Action> {

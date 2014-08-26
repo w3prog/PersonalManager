@@ -19,6 +19,7 @@ public class Person {
         this.strImg = strImg;
         this.post = post;
     }
+
     //сокращенный для ввенесения данных в БД
     public Person(String firstName, String lastName, String strImg, String post) {
         FirstName = firstName;
@@ -66,22 +67,25 @@ public class Person {
     public ArrayList<Contact> getContacts() {
         return Contacts;
     }
+
     //добавить элемент в коллекцию контактов
-    public void addContact(Contact c){
+    public void addContact(Contact c) {
         Contacts.add(c);
     }
 
     //Удалить элемент в коллекцию контактов
-    public void removeContect(Contact c){
+    public void removeContact(Contact c) {
         Contacts.remove(c);
     }
+
     //заменить элемент в колекции контактов
-    public void updateContact(int id,Contact c){
-        Contacts.set(id,c);
+    public void updateContact(int id, Contact c) {
+        Contacts.set(id, c);
     }
 
     @Override
     public String toString() {
         return FirstName + " " + LastName;
     }
+
 }

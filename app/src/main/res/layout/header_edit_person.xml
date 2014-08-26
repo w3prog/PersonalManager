@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:scaleType="centerCrop"
+        android:id="@+id/logoPerson"
+        android:src="@drawable/icomoon_ignore" />
+
+    <GridLayout
+        android:orientation="horizontal"
+        android:columnCount="2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            style="?android:listSeparatorTextViewStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Имя"/>
+
+        <EditText
+            android:textColor="#888"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Введите имя"
+            android:id="@+id/person_edit_firstname" />
+
+        <TextView
+            style="?android:listSeparatorTextViewStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Фамилия"/>
+
+        <EditText
+            android:textColor="#888"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Введите фамилию"
+            android:id="@+id/person_edit_lastname" />
+
+        <TextView
+            style="?android:listSeparatorTextViewStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Должность"
+            android:layout_gravity="center"/>
+
+        <EditText
+            android:textColor="#888"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Введите должность"
+            android:id="@+id/person_edit_post" />
+    </GridLayout>
+
+    <TextView
+        style="?android:listSeparatorTextViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Номера телефонов"/>
+
+
+</LinearLayout>

@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -29,9 +28,8 @@ public class FragmentListPerson extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        personArrayList = DataBase.Get(getActivity()).getPersons();
+        personArrayList = DataBase.get(getActivity()).getPersons();
         setHasOptionsMenu(true);
-
         PersonAdapter personAdapter = new PersonAdapter(personArrayList);
         setListAdapter(personAdapter);
     }
@@ -39,12 +37,12 @@ public class FragmentListPerson extends ListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         final LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = (LinearLayout) inflater.inflate(R.layout.footer_list_person, null);
+        View view = inflater.inflate(R.layout.footer_list_person, null);
         Button buttonFooter = (Button) view.findViewById(R.id.FooterListPerson);
         buttonFooter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                long l = DataBase.Get(getActivity()).insertNewPerson();
+                long l = DataBase.get(getActivity()).insertNewPerson();
                 Intent i = new Intent(getActivity(), ActivityEditPerson.class);
                 i.putExtra(FragmentEditPerson.EXTRA_PERSON_ID, l);
                 startActivity(i);
@@ -57,7 +55,6 @@ public class FragmentListPerson extends ListFragment {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         Person c = ((PersonAdapter) getListAdapter()).getItem(position);
-
         Intent i = new Intent(getActivity(), ActivityEditPerson.class);
         i.putExtra(FragmentEditPerson.EXTRA_PERSON_ID, c.getId());
         startActivity(i);
@@ -66,12 +63,10 @@ public class FragmentListPerson extends ListFragment {
     @Override
     public void onResume() {
         super.onResume();
-        //personArrayList.clear();
-        personArrayList = DataBase.Get(getActivity()).getPersons();
+        personArrayList = DataBase.get(getActivity()).getPersons();
         PersonAdapter personAdapter = new PersonAdapter(personArrayList);
         setListAdapter(personAdapter);
     }
-
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

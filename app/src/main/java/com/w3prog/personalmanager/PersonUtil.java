@@ -7,19 +7,19 @@ import java.util.Date;
 public class PersonUtil {
 
     // возращает дату в текстовом формате
-    public static String writeDate(Date date){
-        Calendar calendar =Calendar.getInstance();
+    public static String writeDate(Date date) {
+        Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         int year = calendar.get(calendar.YEAR);
-        String month = toMinth(calendar.get(calendar.MONTH));
+        String month = toMonth(calendar.get(calendar.MONTH));
         int days = calendar.get(calendar.DAY_OF_MONTH);
 
-        return "" +days + " " + month + " " + year;
+        return "" + days + " " + month + " " + year;
 
     }
 
     // возвращат время в текстовом формате
-    public static String writeTime(Date date){
+    public static String writeTime(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         int Hour = calendar.get(calendar.HOUR_OF_DAY);
@@ -28,9 +28,9 @@ public class PersonUtil {
     }
 
     // возращает текстовое представления месяца
-    private static String toMinth(int s) {
+    private static String toMonth(int s) {
 
-        switch (s){
+        switch (s) {
             case 0:
                 return "Января";
             case 1:
@@ -61,12 +61,33 @@ public class PersonUtil {
     }
 
     // выводит достижения персоны между определенными датами
-    public ArrayList<Action> оценитьперсону(Person person,Date startDate,Date endDate){
-        ArrayList<Action> Actions =null;
+    public ArrayList<Action> оценитьперсону(Person person, Date startDate, Date endDate) {
+        ArrayList<Action> Actions = null;
         //Получить мероприятия текущей персоны запрос к базе данных
 
 
         //Data
         return Actions;
+    }
+
+    public static boolean checkString(String string) {
+        if (string == null || string.length() == 0) return false;
+
+        int i = 0;
+        if (string.charAt(0) == '-') {
+            if (string.length() == 1) {
+                return false;
+            }
+            i = 1;
+        }
+
+        char c;
+        for (; i < string.length(); i++) {
+            c = string.charAt(i);
+            if (!(c >= '0' && c <= '9')) {
+                return false;
+            }
+        }
+        return true;
     }
 }

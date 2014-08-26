@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -47,13 +46,13 @@ public class FragmentListTask extends ListFragment {
 
     private void setData() {
         final LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = (LinearLayout) inflater.inflate(R.layout.footer_list_task, null);
+        View view = inflater.inflate(R.layout.footer_list_task, null);
 
         Button buttonFooter = (Button) view.findViewById(R.id.FooterListTask);
         buttonFooter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                long l = DataBase.Get(getActivity()).insertNewTask();
+                long l = DataBase.get(getActivity()).insertNewTask();
                 Intent i = new Intent(getActivity(), ActivityEditTask.class);
                 i.putExtra(FragmentEditTask.EXTRA_TASK_ID, l);
                 startActivity(i);
@@ -62,7 +61,7 @@ public class FragmentListTask extends ListFragment {
         ListView listView = getListView();
         listView.addFooterView(view);
 
-        taskArrayList = DataBase.Get(getActivity()).getTasks();
+        taskArrayList = DataBase.get(getActivity()).getTasks();
         setHasOptionsMenu(true);
         TaskAdapter taskAdapter = new TaskAdapter(taskArrayList);
         setListAdapter(taskAdapter);
@@ -91,15 +90,15 @@ public class FragmentListTask extends ListFragment {
                 switch (item.getItemId()) {
                     case R.id.DeleteTask:
                         TaskAdapter adapter = (TaskAdapter) getListAdapter();
-                        taskArrayList = DataBase.Get(getActivity()).getTasks();
+                        taskArrayList = DataBase.get(getActivity()).getTasks();
                         for (int i = adapter.getCount() - 1; i >= 0; i--) {
                             if (getListView().isItemChecked(i)) {
-                                DataBase.Get(getActivity()).deleteTask(
+                                DataBase.get(getActivity()).deleteTask(
                                         adapter.getItem(i).getId());
                             }
                         }
                         mode.finish();
-                        taskArrayList = DataBase.Get(getActivity()).getTasks();
+                        taskArrayList = DataBase.get(getActivity()).getTasks();
                         TaskAdapter taskAdapter = new TaskAdapter(taskArrayList);
                         setListAdapter(taskAdapter);
                         return true;
@@ -127,8 +126,7 @@ public class FragmentListTask extends ListFragment {
     @Override
     public void onResume() {
         super.onResume();
-        taskArrayList = DataBase.Get(getActivity()).getTasks();
-        //todo Спросить можно ли это сделать попроще
+        taskArrayList = DataBase.get(getActivity()).getTasks();
         TaskAdapter taskAdapter = new TaskAdapter(taskArrayList);
         setListAdapter(taskAdapter);
     }

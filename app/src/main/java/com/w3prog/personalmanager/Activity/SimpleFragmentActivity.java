@@ -7,7 +7,7 @@ import android.os.Bundle;
 
 import com.w3prog.personalmanager.R;
 
-public abstract class  SimpleFragmentActivity extends Activity {
+public abstract class SimpleFragmentActivity extends Activity {
 
     protected abstract Fragment getFragment();
 
@@ -18,11 +18,11 @@ public abstract class  SimpleFragmentActivity extends Activity {
 
         FragmentManager fragmentManager = getFragmentManager();
         Fragment fragment = fragmentManager.findFragmentById(R.id.fragmentActivity);
-        if (fragment == null){
+        if (fragment == null) {
             fragment = getFragment();
             fragmentManager.beginTransaction()
-                .add(R.id.fragmentActivity,fragment)
-                .commit();
+                    .add(R.id.fragmentActivity, fragment)
+                    .commit();
         }
     }
 }

@@ -27,7 +27,7 @@ public class DialogSelectAction extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final ArrayList<Action> actions = new ArrayList<Action>(
-                DataBase.Get(getActivity()).getActions());
+                DataBase.get(getActivity()).getActions());
         if (actions.size() == 0) {
             //todo решить проблему нулевых выборов.
         }
