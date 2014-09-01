@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.w3prog.personalmanager.Contact;
 import com.w3prog.personalmanager.DataBase;
@@ -126,6 +126,8 @@ public class FragmentEditPerson extends ListFragment {
 
         imageViewLogo = (ImageView) viewHeader.findViewById(R.id.logoPerson);
         if (person.getStrImg() != "" || person.getStrImg() != null){
+            Log.e(TAG,"Открытие картинки");
+            Log.e(TAG,person.getStrImg());
             imageViewLogo.setImageURI(Uri.parse(person.getStrImg()));
         }
 
@@ -193,7 +195,6 @@ public class FragmentEditPerson extends ListFragment {
         DataBase.get(getActivity()).updatePerson((int) person.getId(), person);
     }
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch(requestCode) {
@@ -201,11 +202,12 @@ public class FragmentEditPerson extends ListFragment {
                 if(resultCode == Activity.RESULT_OK){
                     Uri selectedImage = data.getData();
                     imageViewLogo.setImageURI(selectedImage);
+
+                    Log.e(TAG,data.getData().toString());
                     person.setStrImg(data.getData().toString());
                 }
         }
     }
-
 
     class ContactAdapter extends ArrayAdapter<Contact> {
 
@@ -248,15 +250,10 @@ public class FragmentEditPerson extends ListFragment {
             buttonCall.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    try {
+
                     Intent intent = new Intent(Intent.ACTION_DIAL);
                     intent.setData(Uri.parse("tel:" + contact.getDescription()));
                     startActivity(intent);
-                    } catch (Exception e){
-                        Toast.makeText(getContext(),
-                                "Проверьте правильность введенного номера",
-                                Toast.LENGTH_SHORT);
-                    }
                 }
             });
             ImageButton buttonDelete = (ImageButton) convertView
@@ -268,8 +265,6 @@ public class FragmentEditPerson extends ListFragment {
                     DataBase.get(getActivity()).deleteContact((int) contact.getIdContact());
                 }
             });
-
-
 
             return convertView;
         }

@@ -610,6 +610,32 @@ public class DataBase {
         return arrayList;
     }
 
+
+    public ArrayList<Person> getPersonsInGroup(Person person){
+        ArrayList<Person> persons = new ArrayList<Person>();
+        Cursor c = database.rawQuery("Select " + ROW_PERSON_ID + ", " +
+                ROW_PERSON_FIRST_NAME + ", " +
+                ROW_PERSON_LAST_NAME + ", " +
+                ROW_PERSON_SRC_IMG + ", " +
+                ROW_PERSON_POST + " from " + TABLE_PERSON + " as TP inner join " +
+                TABLE_PERSON_IN_GROUP + " as TPIG on Tp." + ROW_PERSON_ID +
+                "=TPIG."+ROW_PERSON_IN_GROUP_ID_GROUP+
+                " where " + ROW_PERSON_IN_GROUP_ID_PERSON + "=" + person.getId() +
+                "order by " + ROW_PERSON_ID, null);
+        if (c.moveToFirst()) {
+            do {
+                persons.add(new Person(
+                        c.getInt(c.getColumnIndex(ROW_PERSON_ID)),
+                        c.getString(c.getColumnIndex(ROW_PERSON_FIRST_NAME)),
+                        c.getString(c.getColumnIndex(ROW_PERSON_LAST_NAME)),
+                        c.getString(c.getColumnIndex(ROW_PERSON_SRC_IMG)),
+                        c.getString(c.getColumnIndex(ROW_PERSON_POST))
+                ));
+                c.moveToNext();
+            } while (c.isAfterLast() == false);
+        }
+        return persons;
+    }
     // конец операций с таблицей group
 
     //Начало операция с таблице person in group
@@ -774,35 +800,33 @@ public class DataBase {
 
         Long task = insertTask(new Task("Хозяственная деятельность", ""));
 
-        insertContact(new Contact(person1,  "12345"));
-        insertContact(new Contact(person1,  "23456"));
-        insertContact(new Contact(person1,  "www.vk.com/person"));
-        insertContact(new Contact(person1,  "www.mail.com/person"));
+        insertContact(new Contact(person1,  "123450000"));
+        insertContact(new Contact(person1,  "234560000"));
 
-        insertContact(new Contact(person2, "90123"));
-        insertContact(new Contact(person2,  "01234"));
-        insertContact(new Contact(person2,  "13456"));
-        insertContact(new Contact(person2,  "24567"));
+        insertContact(new Contact(person2, "901230000"));
+        insertContact(new Contact(person2,  "012340000"));
+        insertContact(new Contact(person2,  "134560000"));
+        insertContact(new Contact(person2,  "245670000"));
 
-        insertContact(new Contact(person3,  "35678"));
-        insertContact(new Contact(person3,  "46789"));
-        insertContact(new Contact(person3,  "57890"));
-        insertContact(new Contact(person3,  "68901"));
+        insertContact(new Contact(person3,  "356780000"));
+        insertContact(new Contact(person3,  "467890000"));
+        insertContact(new Contact(person3,  "578900000"));
+        insertContact(new Contact(person3,  "689010000"));
 
-        insertContact(new Contact(person4, "12345"));
-        insertContact(new Contact(person4, "23456"));
-        insertContact(new Contact(person4, "34567"));
-        insertContact(new Contact(person4, "45678"));
+        insertContact(new Contact(person4, "123450000"));
+        insertContact(new Contact(person4, "234560000"));
+        insertContact(new Contact(person4, "345670000"));
+        insertContact(new Contact(person4, "456780000"));
 
-        insertContact(new Contact(person5, "90123"));
-        insertContact(new Contact(person5, "01234"));
-        insertContact(new Contact(person5, "13456"));
-        insertContact(new Contact(person5, "24567"));
+        insertContact(new Contact(person5, "901230000"));
+        insertContact(new Contact(person5, "012340000"));
+        insertContact(new Contact(person5, "134560000"));
+        insertContact(new Contact(person5, "245670000"));
 
-        insertContact(new Contact(person6, "35678"));
-        insertContact(new Contact(person6, "46789"));
-        insertContact(new Contact(person6, "57890"));
-        insertContact(new Contact(person6, "68901"));
+        insertContact(new Contact(person6, "356780000"));
+        insertContact(new Contact(person6, "467890000"));
+        insertContact(new Contact(person6, "578900000"));
+        insertContact(new Contact(person6, "689010000"));
 
         Long action1 = insertAction(
                 new Action("Инвентаризация", new Date(), ""), task);

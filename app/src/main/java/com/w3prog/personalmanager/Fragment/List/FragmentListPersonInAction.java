@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.w3prog.personalmanager.Action;
 import com.w3prog.personalmanager.DataBase;
@@ -44,7 +45,6 @@ public class FragmentListPersonInAction extends ListFragment {
     private Action action = null;
     private Button buttonHeader;
     private Button buttonFooter;
-    //todo не показывает новые значения!!!
 
 
     @Override
@@ -111,12 +111,12 @@ public class FragmentListPersonInAction extends ListFragment {
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.DeletePersonIA:
-                        //todo не всегда правильно удаляет
+                        //todo нужно проверить корректность удаления.
                         for (int i = personAdapter.getCount() - 1; i >= 0; i--) {
                             if (getListView().isItemChecked(i)) {
                                 DataBase.get(getActivity())
                                         .deleteRowPersonInAction(
-                                                personAdapter.getItem(i).getPerson().getId(),
+                                                personAdapter.getItem(i+1).getPerson().getId(),
                                                 action.getId());
                             }
                         }
@@ -150,7 +150,16 @@ public class FragmentListPersonInAction extends ListFragment {
         if (requestCode == REQUEST_PERSON) {
             long l = data.getLongExtra(DialogSelectPerson.EXTRA_PERSON, 0);
             Person person = DataBase.get(getActivity()).getPerson(l);
-            //todo решить проблему наличия в активити, выбранного человека, второй раз
+
+            for (Person item :personArrayList) {
+                if (item.getId() == person.getId()){
+                    Toast.makeText(getActivity(),
+                            "Данный человек уже присутствует в мероприятии",Toast.LENGTH_SHORT);
+                    return;
+                }
+
+            }
+
             DataBase.get(getActivity()).insertRowPersonInAction(person.getId(), action.getId());
             if (personArrayList == null)
                 personArrayList = new ArrayList<Person>();

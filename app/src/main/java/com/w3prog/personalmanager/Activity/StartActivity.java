@@ -23,8 +23,7 @@ import com.w3prog.personalmanager.Fragment.List.FragmentListTask;
 import com.w3prog.personalmanager.NavigationDrawerFragment;
 import com.w3prog.personalmanager.R;
 
-public class StartTabActivity extends Activity implements
-        //ActionBar.TabListener,
+public class StartActivity extends Activity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     FragmentManager fragmentManager = getFragmentManager();
@@ -35,15 +34,13 @@ public class StartTabActivity extends Activity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.fragment_activity);
-        setContentView(R.layout.activity_my);
+        setContentView(R.layout.fragment_activity);
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
 
-        // Set up the drawer.
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
@@ -51,90 +48,78 @@ public class StartTabActivity extends Activity implements
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
-        // update the main content by replacing fragments
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragmentActivity, PlaceholderFragment
-                        .newInstance(position + 1))
-                .commit();
+        addFragment(PlaceholderFragment.newInstance(position + 1));
     }
 
     protected void openStartPanelFragment() {
         mTitle = "Стартовое меню";
         Fragment fragment = new StartPanelFragment();
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragmentActivity, fragment)
-                .commit();
+        addFragment(fragment);
     }
 
     protected void openFragmentListPerson() {
         mTitle = getString(R.string.title_section1);
         Fragment fragment = new FragmentListPerson();
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragmentActivity, fragment)
-                .commit();
+        addFragment(fragment);
     }
 
     protected void openFragmentListGroup() {
         mTitle = getString(R.string.title_section2);
         Fragment fragment = new FragmentListGroup();
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragmentActivity, fragment)
-                .commit();
+        addFragment(fragment);
     }
 
     protected void openFragmentListAction() {
         mTitle = getString(R.string.title_section3);
         Fragment fragment = new FragmentListAction();
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragmentActivity, fragment)
-                .commit();
+        addFragment(fragment);
     }
 
     protected void openFragmentListTask() {
         mTitle = getString(R.string.title_section4);
         Fragment fragment = new FragmentListTask();
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragmentActivity, fragment)
-                .commit();
+        addFragment(fragment);
     }
 
     protected void openFragmentPersonInAction() {
         Fragment fragment = new FragmentListPersonInAction();
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragmentActivity, fragment)
-                .commit();
+        addFragment(fragment);
     }
 
     protected void openPersonsReportInTask() {
         Fragment fragment = new FragmentReport();
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragmentActivity, fragment)
-                .commit();
+        addFragment(fragment);
     }
 
     protected void openPersonsReportInDate() {
         Fragment fragment = new FragmentReportOfDate();
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragmentActivity, fragment)
-                .commit();
+        addFragment(fragment);
     }
 
     protected void openTotalReport(){
         Fragment fragment = new FragmentTotalReport();
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragmentActivity, fragment)
-                .commit();
+        addFragment(fragment);
     }
 
     protected void openTotalReportofDate(){
         Fragment fragment = new FragmentTotalReportOfDate();
+        addFragment(fragment);
+    }
+
+    protected void addFragment(Fragment fragment){
         fragmentManager.beginTransaction()
                 .replace(R.id.fragmentActivity, fragment)
+                .addToBackStack(null)
                 .commit();
     }
 
-
+    @Override
+    public void onBackPressed() {
+        FragmentManager fm = getFragmentManager();
+        if (fm.getBackStackEntryCount() > 0) {
+            fm.popBackStack();
+        }
+    }
     public void onSectionAttached(int number) {
         switch (number) {
             case 1:
@@ -146,7 +131,7 @@ public class StartTabActivity extends Activity implements
                 break;
             case 3:
                 mTitle = "Ввести задачу";
-                //todo доделать
+                //todo Решить проблемму
                 break;
             case 4:
                 openFragmentListPerson();
@@ -205,7 +190,7 @@ public class StartTabActivity extends Activity implements
         @Override
         public void onAttach(Activity activity) {
             super.onAttach(activity);
-            ((StartTabActivity) activity).onSectionAttached(
+            ((StartActivity) activity).onSectionAttached(
                     getArguments().getInt(ARG_SECTION_NUMBER));
         }
     }

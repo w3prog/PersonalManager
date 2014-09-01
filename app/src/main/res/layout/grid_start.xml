@@ -6,7 +6,7 @@
     android:orientation="horizontal"
     android:columnCount="2"
     android:layout_gravity="center">
-
+    //todo обновить дизайн
     <LinearLayout
         android:id="@+id/holdAction"
         android:orientation="vertical"
@@ -216,9 +216,5 @@
             android:layout_height="wrap_content" />
 
     </LinearLayout>
-
-
-
-
 
 </GridLayout>

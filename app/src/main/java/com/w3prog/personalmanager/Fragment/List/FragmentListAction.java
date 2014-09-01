@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class FragmentListAction extends ListFragment {
     private static final String TAG = "FragmentListAction";
     private ArrayList<Action> actionsArrayList;
-
+    //todo реализовать удаление
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -21,7 +21,7 @@ public class FragmentListGroup extends ListFragment {
     private static final String TAG = "FragmentListGroup";
     private ArrayList<Group> groupArrayList;
     GroupAdapter groupAdapter = null;
-
+    //todo реализовать удаление
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

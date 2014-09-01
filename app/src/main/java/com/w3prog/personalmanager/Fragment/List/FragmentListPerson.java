@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class FragmentListPerson extends ListFragment {
     private static final String TAG = "FragmentListPerson";
     private ArrayList<Person> personArrayList;
-
+    //todo реализовать удаление
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
