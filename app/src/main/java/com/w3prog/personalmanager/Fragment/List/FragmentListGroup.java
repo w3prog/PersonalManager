@@ -1,5 +1,6 @@
 package com.w3prog.personalmanager.Fragment.List;
 
+import android.app.Activity;
 import android.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -14,12 +16,15 @@ import com.w3prog.personalmanager.Activity.ActivityEditGroup;
 import com.w3prog.personalmanager.DataBase;
 import com.w3prog.personalmanager.Fragment.Edit.FragmentEditGroup;
 import com.w3prog.personalmanager.Group;
+import com.w3prog.personalmanager.R;
 
 import java.util.ArrayList;
 
 public class FragmentListGroup extends ListFragment {
     private static final String TAG = "FragmentListGroup";
     private ArrayList<Group> groupArrayList;
+    private View viewFooter;
+    private Button buttonAdd;
     GroupAdapter groupAdapter = null;
     //todo реализовать удаление
     @Override
@@ -33,7 +38,25 @@ public class FragmentListGroup extends ListFragment {
     }
 
     @Override
+    public void onAttach(Activity activity) {
+        viewFooter = getActivity().getLayoutInflater()
+                .inflate( R.layout.footer_list_group,null);
+        buttonAdd = (Button) viewFooter.findViewById(R.id.add);
+        buttonAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Long l = DataBase.get(getActivity()).insertNewGroup();
+                Intent i = new Intent(getActivity(), ActivityEditGroup.class);
+                i.putExtra(FragmentEditGroup.EXTRA_GROUP_ID, l);
+                startActivity(i);
+            }
+        });
+        super.onAttach(activity);
+    }
+
+    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        getListView().addFooterView(viewFooter);
         setData();
         super.onActivityCreated(savedInstanceState);
     }

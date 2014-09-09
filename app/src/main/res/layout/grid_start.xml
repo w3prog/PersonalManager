@@ -6,19 +6,21 @@
     android:orientation="horizontal"
     android:columnCount="2"
     android:layout_gravity="center">
-    //todo обновить дизайн
     <LinearLayout
+        android:layout_columnSpan="2"
+        android:layout_marginTop="10dp"
         android:id="@+id/holdAction"
         android:orientation="vertical"
-        android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
+        android:layout_marginRight="10dp"
+        android:layout_height="100dp"
+        android:layout_width="170dp">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/ic_launcher"/>
+            android:src="@drawable/ic_action_content_new"/>
 
         <TextView
             android:text="Провести мероприятие"
@@ -29,38 +31,19 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/designateTask"
+        android:layout_marginTop="10dp"
+        android:id="@+id/listContacts"
         android:orientation="vertical"
-        android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_launcher"/>
-
-        <TextView
-            android:text="Обозначить задачу"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
-
-    <LinearLayout
-            android:id="@+id/listContacts"
-            android:orientation="vertical"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp">
+        android:layout_marginRight="10dp"
+        android:layout_height="100dp"
+        android:layout_width="170dp">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_launcher"/>
+                android:src="@drawable/ic_action_social_person"/>
 
             <TextView
                 android:text="Список контактов"
@@ -73,15 +56,16 @@
     <LinearLayout
         android:id="@+id/listGroups"
         android:orientation="vertical"
-        android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
+        android:layout_marginRight="10dp"
+        android:layout_width="170dp"
+        android:layout_height="100dp">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/ic_launcher"/>
+            android:src="@drawable/ic_action_social_cc_bcc"/>
 
         <TextView
             android:text="Список групп"
@@ -94,15 +78,16 @@
     <LinearLayout
         android:id="@+id/listActions"
         android:orientation="vertical"
-        android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
+        android:layout_marginRight="10dp"
+        android:layout_width="170dp"
+        android:layout_height="100dp">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/ic_launcher"/>
+            android:src="@drawable/ic_action_rating_not_important"/>
 
         <TextView
             android:text="Список мероприятий"
@@ -115,15 +100,16 @@
     <LinearLayout
         android:id="@+id/listTask"
         android:orientation="vertical"
-        android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
+        android:layout_marginRight="10dp"
+        android:layout_width="170dp"
+        android:layout_height="110dp">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/ic_launcher"/>
+            android:src="@drawable/ic_action_rating_important"/>
 
         <TextView
             android:text="Список задач"
@@ -136,15 +122,16 @@
     <LinearLayout
         android:id="@+id/personReportTask"
         android:orientation="vertical"
-        android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
+        android:layout_marginRight="10dp"
+        android:layout_width="170dp"
+        android:layout_height="110dp">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/ic_launcher"/>
+            android:src="@drawable/ic_action_content_import_export"/>
 
         <TextView
             android:text="Личный отчет \nпо задаче"
@@ -157,15 +144,16 @@
     <LinearLayout
         android:id="@+id/personReportDate"
         android:orientation="vertical"
-        android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
+        android:layout_marginRight="10dp"
+        android:layout_width="170dp"
+        android:layout_height="110dp">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/ic_launcher"/>
+            android:src="@drawable/ic_action_social_group"/>
 
         <TextView
             android:text="Личный отчет \nпо времени"
@@ -178,15 +166,16 @@
     <LinearLayout
         android:id="@+id/generalReportTask"
         android:orientation="vertical"
-        android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
+        android:layout_marginRight="10dp"
+        android:layout_width="170dp"
+        android:layout_height="110dp">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/ic_launcher"/>
+            android:src="@drawable/ic_action_content_import_export"/>
 
         <TextView
             android:text="Общий отчет \nпо задаче"
@@ -199,15 +188,15 @@
     <LinearLayout
         android:id="@+id/generalReportDate"
         android:orientation="vertical"
-        android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
+        android:layout_marginRight="10dp"
+        android:layout_width="170dp">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/ic_launcher"/>
+            android:src="@drawable/ic_action_social_group"/>
 
         <TextView
             android:text="Личный отчет \nпо времени"

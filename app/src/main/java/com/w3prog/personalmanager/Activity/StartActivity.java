@@ -130,34 +130,30 @@ public class StartActivity extends Activity implements
                 openFragmentPersonInAction();
                 break;
             case 3:
-                mTitle = "Ввести задачу";
-                //todo Решить проблемму
-                break;
-            case 4:
                 openFragmentListPerson();
                 break;
-            case 5:
+            case 4:
                 openFragmentListGroup();
                 break;
-            case 6:
+            case 5:
                 openFragmentListAction();
                 break;
-            case 7:
+            case 6:
                 openFragmentListTask();
                 break;
-            case 8:
+            case 7:
                 mTitle = "Личный отчет по задаче";
                 openPersonsReportInTask();
                 break;
-            case 9:
+            case 8:
                 mTitle = "Личный отчет по времени";
                 openPersonsReportInDate();
                 break;
-            case 10:
+            case 9:
                 mTitle = "Полный отчет по задаче";
                 openTotalReport();
                 break;
-            case 11:
+            case 10:
                 mTitle = "Полный отчет по времени";
                 openTotalReportofDate();
                 break;
@@ -199,7 +195,6 @@ public class StartActivity extends Activity implements
 
         private static final String ARG_SECTION_NUMBER = "section_number";
         LinearLayout linearLayoutHoldAction;
-        LinearLayout linearLayoutDesignateTask;
         LinearLayout linearLayoutListContacts;
         LinearLayout linearLayoutListGroups;
         LinearLayout linearLayoutListAction;
@@ -213,13 +208,6 @@ public class StartActivity extends Activity implements
             @Override
             public void onClick(View v) {
                 openFragmentPersonInAction();
-            }
-        };
-
-        View.OnClickListener onClickListenerDesignateTask = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
             }
         };
 
@@ -284,7 +272,6 @@ public class StartActivity extends Activity implements
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View view = inflater.inflate(R.layout.grid_start, container, false);
             linearLayoutHoldAction = (LinearLayout) view.findViewById(R.id.holdAction);
-            linearLayoutDesignateTask = (LinearLayout) view.findViewById(R.id.designateTask);
             linearLayoutListContacts = (LinearLayout) view.findViewById(R.id.listContacts);
             linearLayoutListGroups = (LinearLayout) view.findViewById(R.id.listGroups);
             linearLayoutListAction = (LinearLayout) view.findViewById(R.id.listActions);
@@ -300,7 +287,6 @@ public class StartActivity extends Activity implements
         public void onActivityCreated(Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
             linearLayoutHoldAction.setOnClickListener(onClickListenerHoldAction);
-            linearLayoutDesignateTask.setOnClickListener(onClickListenerDesignateTask);
             linearLayoutListContacts.setOnClickListener(onClickListenerListContacts);
             linearLayoutListGroups.setOnClickListener(onClickListenerListGroups);
             linearLayoutListAction.setOnClickListener(onClickListenerListAction);

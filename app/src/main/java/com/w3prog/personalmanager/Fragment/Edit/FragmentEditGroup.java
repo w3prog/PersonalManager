@@ -113,8 +113,13 @@ public class FragmentEditGroup extends ListFragment {
 
         getListView().addHeaderView(viewHeader);
         getListView().addFooterView(viewFooter);
-        adapter = new PersonAdapter(persons);
-        setListAdapter(adapter);
+        if (persons!=null&&!(persons.size()>0)){
+            adapter = new PersonAdapter(persons);
+            setListAdapter(adapter);
+        }else {
+            setListAdapter(null);
+        }
+
         super.onActivityCreated(savedInstanceState);
     }
 

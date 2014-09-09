@@ -27,6 +27,7 @@
     <string name="AddTask">Добавить задачу</string>
     <string name="AddPerson">Добавить личность</string>
     <string name="AddAction">Добавить мероприятие</string>
+    <string name="AddGroup">Добавить Группу</string>
     <string name="ListActionInTask">Список мероприятий в задаче</string>
     <string name="AddPersonInAction">Добавить человека</string>
 

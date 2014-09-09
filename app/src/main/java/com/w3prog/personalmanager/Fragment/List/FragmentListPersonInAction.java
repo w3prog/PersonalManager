@@ -89,6 +89,7 @@ public class FragmentListPersonInAction extends ListFragment {
 
         listView.addFooterView(view1);
         setHasOptionsMenu(true);
+
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
             @Override
@@ -97,6 +98,7 @@ public class FragmentListPersonInAction extends ListFragment {
 
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                Log.d(TAG,"inflaterMenu");
                 MenuInflater inflaterMenu = mode.getMenuInflater();
                 inflaterMenu.inflate(R.menu.context_menu_fragment_person_in_action, menu);
                 return true;
@@ -111,6 +113,7 @@ public class FragmentListPersonInAction extends ListFragment {
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.DeletePersonIA:
+                        Log.d(TAG,"Прошел успешно!!!!!!!");
                         //todo нужно проверить корректность удаления.
                         for (int i = personAdapter.getCount() - 1; i >= 0; i--) {
                             if (getListView().isItemChecked(i)) {

@@ -86,57 +86,52 @@ public class NavigationDrawerFragment extends Fragment {
 
         HashMap<String, Object> hm = new HashMap<String, Object>();
         hm.put(TITLE, "Стартовое меню");
-        hm.put(ICON, R.drawable.ic_launcher);
+        hm.put(ICON, R.drawable.ic_action_collections_view_as_grid);
         nameList.add(hm);
 
         hm = new HashMap<String, Object>();
         hm.put(TITLE, "Провести мероприятие");
-        hm.put(ICON, R.drawable.ic_launcher);
-        nameList.add(hm);
-
-        hm = new HashMap<String, Object>();
-        hm.put(TITLE, "Вывести задачу");
-        hm.put(ICON, R.drawable.ic_launcher);
+        hm.put(ICON, R.drawable.ic_action_content_new);
         nameList.add(hm);
 
         hm = new HashMap<String, Object>();
         hm.put(TITLE, getString(R.string.title_section1));
-        hm.put(ICON, R.drawable.ic_launcher);
+        hm.put(ICON, R.drawable.ic_action_social_person);
         nameList.add(hm);
 
         hm = new HashMap<String, Object>();
         hm.put(TITLE, getString(R.string.title_section2));
-        hm.put(ICON, R.drawable.ic_launcher);
+        hm.put(ICON, R.drawable.ic_action_social_cc_bcc);
         nameList.add(hm);
 
         hm = new HashMap<String, Object>();
         hm.put(TITLE, getString(R.string.title_section3));
-        hm.put(ICON, R.drawable.ic_launcher);
+        hm.put(ICON, R.drawable.ic_action_rating_not_important);
         nameList.add(hm);
 
         hm = new HashMap<String, Object>();
         hm.put(TITLE, getString(R.string.title_section4));
-        hm.put(ICON, R.drawable.ic_launcher);
+        hm.put(ICON, R.drawable.ic_action_rating_important);
         nameList.add(hm);
 
         hm = new HashMap<String, Object>();
         hm.put(TITLE, "Личный отчет по задаче");
-        hm.put(ICON, R.drawable.ic_launcher);
+        hm.put(ICON, R.drawable.ic_action_content_import_export);
         nameList.add(hm);
 
         hm = new HashMap<String, Object>();
         hm.put(TITLE, "Личный отчет по времени");
-        hm.put(ICON, R.drawable.ic_launcher);
+        hm.put(ICON, R.drawable.ic_action_social_group);
         nameList.add(hm);
 
         hm = new HashMap<String, Object>();
         hm.put(TITLE, "Полный отчет по задаче");
-        hm.put(ICON, R.drawable.ic_launcher);
+        hm.put(ICON, R.drawable.ic_action_content_import_export);
         nameList.add(hm);
 
         hm = new HashMap<String, Object>();
         hm.put(TITLE, "Полный отчет по времени");
-        hm.put(ICON, R.drawable.ic_launcher);
+        hm.put(ICON, R.drawable.ic_action_social_group);
         nameList.add(hm);
 
 
