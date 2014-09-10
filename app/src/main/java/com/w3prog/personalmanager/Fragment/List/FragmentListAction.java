@@ -3,9 +3,14 @@ package com.w3prog.personalmanager.Fragment.List;
 import android.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -22,7 +27,6 @@ import java.util.ArrayList;
 public class FragmentListAction extends ListFragment {
     private static final String TAG = "FragmentListAction";
     private ArrayList<Action> actionsArrayList;
-    //todo реализовать удаление
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +34,7 @@ public class FragmentListAction extends ListFragment {
         setHasOptionsMenu(true);
         ActionAdapter actionAdapter = new ActionAdapter(actionsArrayList);
         setListAdapter(actionAdapter);
+
     }
 
     @Override
@@ -63,6 +68,59 @@ public class FragmentListAction extends ListFragment {
             }
         });
         getListView().addFooterView(view);
+
+        ListView listView = getListView();
+        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+            @Override
+            public void onItemCheckedStateChanged(ActionMode mode,
+                                                  int position,
+                                                  long id,
+                                                  boolean checked) {
+
+            }
+
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                MenuInflater inflaterMenu = mode.getMenuInflater();
+                inflaterMenu.inflate(R.menu.context_menu_list, menu);
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.deleteItem:
+                        ActionAdapter adapter = (ActionAdapter) getListAdapter();
+                        actionsArrayList = DataBase.get(getActivity()).getActions();
+                        for (int i = adapter.getCount() - 1; i >= 0; i--) {
+                            if (getListView().isItemChecked(i)) {
+                                DataBase.get(getActivity()).deleteAction(
+                                        adapter.getItem(i).getId());
+                            }
+                        }
+                        mode.finish();
+                        actionsArrayList = DataBase.get(getActivity()).getActions();
+                        ActionAdapter actionAdapter = new ActionAdapter(actionsArrayList);
+                        setListAdapter(actionAdapter);
+                        return true;
+                    default:
+                        return false;
+                }
+
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+
+            }
+        });
+
         super.onActivityCreated(savedInstanceState);
     }
 

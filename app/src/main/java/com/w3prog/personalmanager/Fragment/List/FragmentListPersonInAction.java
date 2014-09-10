@@ -50,6 +50,8 @@ public class FragmentListPersonInAction extends ListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         setData();
+        setHasOptionsMenu(true);
+
         super.onActivityCreated(savedInstanceState);
     }
 
@@ -90,54 +92,6 @@ public class FragmentListPersonInAction extends ListFragment {
         listView.addFooterView(view1);
         setHasOptionsMenu(true);
 
-        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-        listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
-            @Override
-            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-            }
-
-            @Override
-            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                Log.d(TAG,"inflaterMenu");
-                MenuInflater inflaterMenu = mode.getMenuInflater();
-                inflaterMenu.inflate(R.menu.context_menu_fragment_person_in_action, menu);
-                return true;
-            }
-
-            @Override
-            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                return false;
-            }
-
-            @Override
-            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.DeletePersonIA:
-                        Log.d(TAG,"Прошел успешно!!!!!!!");
-                        //todo нужно проверить корректность удаления.
-                        for (int i = personAdapter.getCount() - 1; i >= 0; i--) {
-                            if (getListView().isItemChecked(i)) {
-                                DataBase.get(getActivity())
-                                        .deleteRowPersonInAction(
-                                                personAdapter.getItem(i+1).getPerson().getId(),
-                                                action.getId());
-                            }
-                        }
-                        mode.finish();
-                        action = DataBase.get(getActivity()).getRowsPersonInAction(action);
-                        personAdapter = new PersonsResultAdapter(action.getPersonsInAction());
-                        setListAdapter(personAdapter);
-                        return true;
-                    default:
-                        return false;
-                }
-            }
-
-            @Override
-            public void onDestroyActionMode(ActionMode mode) {
-
-            }
-        });
         setListAdapter(null);
     }
 
@@ -157,12 +111,11 @@ public class FragmentListPersonInAction extends ListFragment {
             for (Person item :personArrayList) {
                 if (item.getId() == person.getId()){
                     Toast.makeText(getActivity(),
+                            //todo приложение крашится:(
                             "Данный человек уже присутствует в мероприятии",Toast.LENGTH_SHORT);
                     return;
                 }
-
             }
-
             DataBase.get(getActivity()).insertRowPersonInAction(person.getId(), action.getId());
             if (personArrayList == null)
                 personArrayList = new ArrayList<Person>();
@@ -183,6 +136,55 @@ public class FragmentListPersonInAction extends ListFragment {
                 Log.e(TAG, personsResult.toString());
             }
             setListAdapter(personAdapter);
+
+            getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+            getListView().setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+                @Override
+                public void onItemCheckedStateChanged(ActionMode mode,
+                                                      int position,
+                                                      long id,
+                                                      boolean checked) {
+
+                }
+
+                @Override
+                public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                    MenuInflater inflaterMenu = mode.getMenuInflater();
+                    inflaterMenu.inflate(R.menu.context_menu_list, menu);
+                    return true;
+                }
+
+                @Override
+                public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                    return false;
+                }
+
+                @Override
+                public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.deleteItem:
+                            for (int i = personAdapter.getCount() - 1; i >= 0; i--) {
+                                if (getListView().isItemChecked(i)) {
+                                    DataBase.get(getActivity())
+                                            .deleteRowPersonInAction(
+                                                    personAdapter.getItem(i+1).getPerson().getId(),
+                                                    action.getId());
+                                }
+                            }
+                            mode.finish();
+                            action = DataBase.get(getActivity()).getRowsPersonInAction(action);
+                            personAdapter = new PersonsResultAdapter(action.getPersonsInAction());
+                            setListAdapter(personAdapter);
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+                @Override
+                public void onDestroyActionMode(ActionMode mode) {
+
+                }
+            });
         } else {
             setListAdapter(null);
         }

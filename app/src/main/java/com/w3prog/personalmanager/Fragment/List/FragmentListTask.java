@@ -79,7 +79,7 @@ public class FragmentListTask extends ListFragment {
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
                 MenuInflater inflaterMenu = mode.getMenuInflater();
-                inflaterMenu.inflate(R.menu.context_menu_fragment_task, menu);
+                inflaterMenu.inflate(R.menu.context_menu_list, menu);
                 return true;
             }
 
@@ -91,7 +91,7 @@ public class FragmentListTask extends ListFragment {
             @Override
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.DeleteTask:
+                    case R.id.deleteItem:
                         TaskAdapter adapter = (TaskAdapter) getListAdapter();
                         taskArrayList = DataBase.get(getActivity()).getTasks();
                         for (int i = adapter.getCount() - 1; i >= 0; i--) {

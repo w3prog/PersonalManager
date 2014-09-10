@@ -3,11 +3,14 @@ package com.w3prog.personalmanager.Fragment.List;
 import android.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -24,12 +27,10 @@ import java.util.ArrayList;
 public class FragmentListPerson extends ListFragment {
     private static final String TAG = "FragmentListPerson";
     private ArrayList<Person> personArrayList;
-    //todo реализовать удаление
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         personArrayList = DataBase.get(getActivity()).getPersons();
-        setHasOptionsMenu(true);
         PersonAdapter personAdapter = new PersonAdapter(personArrayList);
         setListAdapter(personAdapter);
     }
@@ -49,6 +50,58 @@ public class FragmentListPerson extends ListFragment {
             }
         });
         getListView().addFooterView(view);
+
+        ListView listView = getListView();
+        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+            @Override
+            public void onItemCheckedStateChanged(ActionMode mode,
+                                                  int position,
+                                                  long id,
+                                                  boolean checked) {
+
+            }
+
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                MenuInflater inflaterMenu = mode.getMenuInflater();
+                inflaterMenu.inflate(R.menu.context_menu_list, menu);
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.deleteItem:
+                        PersonAdapter adapter = (PersonAdapter) getListAdapter();
+                        personArrayList = DataBase.get(getActivity()).getPersons();
+                        for (int i = adapter.getCount() - 1; i >= 0; i--) {
+                            if (getListView().isItemChecked(i)) {
+                                DataBase.get(getActivity()).deletePerson(
+                                        adapter.getItem(i).getId());
+                            }
+                        }
+                        mode.finish();
+                        personArrayList = DataBase.get(getActivity()).getPersons();
+                        adapter = new PersonAdapter(personArrayList);
+                        setListAdapter(adapter);
+                        return true;
+                    default:
+                        return false;
+                }
+
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+
+            }
+        });
         super.onActivityCreated(savedInstanceState);
     }
 

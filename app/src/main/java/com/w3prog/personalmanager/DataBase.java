@@ -98,7 +98,8 @@ public class DataBase {
 
     }
 
-    public void deletePerson(int id) {
+    public void deletePerson(long id) {
+        database.delete(TABLE_PERSON_IN_GROUP, ROW_PERSON_IN_GROUP_ID_PERSON + " = " + id, null);
         database.delete(TABLE_PERSON, ROW_PERSON_ID + " = " + id, null);
     }
 
@@ -288,12 +289,13 @@ public class DataBase {
                 new String[]{Integer.toString(id)});
     }
 
-    public void deleteAction(int id) {
+    public void deleteAction(long id) {
+        database.delete(TABLE_PERSON_IN_ACTION,
+                ROW_PERSON_IN_ACTION_ID_ACTION + " = " + id,null);
         database.delete(TABLE_ACTION, ROW_ACTION_ID + " = " + id, null);
     }
 
     public Action getAction(long id) {
-        //todo нужно решить проблему со ссылками
         Cursor c = database.query(TABLE_ACTION,
                 null,
                 ROW_ACTION_ID + "=" + id,
@@ -521,7 +523,6 @@ public class DataBase {
                 TABLE_PERSON_IN_ACTION + " as PA" + " on " + "TP." + ROW_PERSON_ID + "=" +
                 "PA." + ROW_PERSON_IN_ACTION_ID_PERSON + " where " +
                 ROW_PERSON_IN_ACTION_ID_ACTION + "=" + actionID +
-                //todo эта строка может вызвать ошибку!!!!!
                 "  order by " + ROW_PERSON_IN_ACTION_ID_ACTION, null);
         if (c.moveToFirst()) {
             do {
